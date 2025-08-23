@@ -1,18 +1,16 @@
 # gameshub
 A Website Consists of classic retro games , Stress Relief
-🕹️ Retro Arcade Hub
+🕹️ Retro Arcade Hub - NOVA BLADE
 
 Step back in time with the Retro Arcade Hub! This project is a visually stunning, one-stop portal dedicated to the golden age of gaming. We're bringing classic, nostalgic games like Snake, Pac-Man, and Tic-Tac-Toe back to life with a modern, futuristic aesthetic, all playable directly in your browser.
 
 Built with a passion for retro gaming and modern web technologies, this hub features a dynamic particle background, immersive background audio, and sleek, neon-lit UI to create an unforgettable gaming experience.
 
-(Pro Tip: Replace this placeholder image with a GIF showcasing the animated background and you navigating to a game!)
 
 ✨ Live Demo
 
-[<-- Your Live Demo Link Here -->]
+[(https://novablade.netlify.app/)]
 
-(Host your project on GitHub Pages, Netlify, or Vercel for a free, shareable link!)
 
 🎮 Games Included
 
