@@ -143,27 +143,31 @@
         }
 
         /* --- MOBILE OPTIMIZATIONS --- */
-        @media screen and (max-width: 768px) {
-            body {
-                /* iOS Safari fix to use full viewport height */
-                min-height: -webkit-fill-available;
-            }
+       @media screen and (max-width: 768px) {
+    body {
+        /* iOS Safari fix to use full viewport height */
+        min-height: -webkit-fill-available;
+        margin: 0; /* reset */
+        padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                 env(safe-area-inset-bottom) env(safe-area-inset-left);
+        box-sizing: border-box;
+        background: #000; /* optional, so padding area blends */
+    }
 
-            .game-console {
-                width: 100vw;
-                height: 100vh;
-                max-width: none;
-                border-radius: 0;
-                padding: 1rem 1rem 0.5rem 1rem; /* Reduced bottom padding */
-                justify-content: space-between; /* Push header up, controls down */
-                gap: 0.5rem;
-                box-sizing: border-box;
-            }
+    .game-console {
+        width: 100%;
+        height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        max-width: none;
+        border-radius: 12px; /* rounded corners instead of flush */
+        padding: 1rem 1rem 0.5rem 1rem;
+        justify-content: space-between;
+        gap: 0.5rem;
+        box-sizing: border-box;
+    }
 
-            .game-screen {
-                /* Adjust max height to account for taller controls */
-                max-height: calc(100vh - 360px);
-            }
+    .game-screen {
+        max-height: calc(100vh - 360px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
             
             /* --- NEW: Center controls vertically --- */
             .controls-panel {
