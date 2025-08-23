@@ -213,7 +213,8 @@ button.mute {
     </div>
     <div class="board" id="board"></div>
     <div class="status" id="status">✨ Your turn!</div>
-    <div class="controls">
+    <div class="controls">
+
       <button id="newMatchBtn">🆕 New Match</button>
     </div>
   </section>
@@ -339,26 +340,6 @@ button.mute {
       return false;
     }
 
-function positionStrike(strike, line) {
-  const cellsEls = Array.from(document.querySelectorAll('.cell'));
-  const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
-  const cellSize = cellsEls[0].offsetWidth;
-
-  const positions = {
-    '0,1,2': { top: cellsEls[0].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[0].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
-    '3,4,5': { top: cellsEls[3].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[3].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
-    '6,7,8': { top: cellsEls[6].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[6].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
-    '0,3,6': { top: cellsEls[0].offsetTop + 'px', left: cellsEls[0].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
-    '1,4,7': { top: cellsEls[1].offsetTop + 'px', left: cellsEls[1].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
-    '2,5,8': { top: cellsEls[2].offsetTop + 'px', left: cellsEls[2].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
-    '0,4,8': { top: cellsEls[0].offsetTop + 'px', left: cellsEls[0].offsetLeft + 'px', width: `calc(100% * 1.414)`, height: '6px', transform: 'rotate(45deg)', transformOrigin: 'top left' },
-    '2,4,6': { top: cellsEls[2].offsetTop + 'px', left: cellsEls[2].offsetLeft + 'px', width: `calc(100% * 1.414)`, height: '6px', transform: 'rotate(-45deg)', transformOrigin: 'top left' },
-  };
-
-  Object.assign(strike.style, positions[line.join(',')]);
-  strike.style.opacity = 1; // make sure it's visible
-}
-
     restartBtn.addEventListener('click', ()=>{ initBoard(); statusEl.textContent=`👉 Your turn (${human})`; gameActive=true; humanTurn=true; restartBtn.classList.add('hidden'); });
     function playSound(id){ if(mute) return; const s=document.getElementById(id); s.currentTime=0; s.play(); }
 
@@ -366,3 +347,4 @@ function positionStrike(strike, line) {
   </script>
 </body>
 </html>
+
