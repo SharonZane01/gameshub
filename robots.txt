@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://novablade.netlify.app/sitemap.xml
