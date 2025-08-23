@@ -2,113 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tic Tac Toe – Step by Step</title>
-  <style>
-    :root{
-      --gap:12px; --cell:120px; --strike:6px;
-    }
-
-Dhanakodi
-	
-5:04 PM (0 minutes ago)
-	
-to me
-/* Responsive adjustments */
-@media (max-width: 768px) {
+<style>
   :root {
-    --cell: 90px;   /* shrink cells */
-    --gap: 10px;
+    --gap: clamp(6px, 2vw, 12px);
+    --cell: clamp(70px, 22vw, 120px);  /* Auto scales for mobile & desktop */
+    --strike: 6px;
   }
-  h1 { font-size: 1.8rem; }
-  .panel { padding: 12px; }
-  .choice-grid button { font-size: 1.2rem; padding: 8px 12px; }
-  button { font-size: 0.95rem; padding: 8px 12px; }
-  .cell { font-size: 2.4rem; border-radius: 12px; }
+
+  * { box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  color: white;
+  text-align: center;
+  background: linear-gradient(45deg, #4568dc, #b06ab3);
+  padding: 12px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 480px) {
-  :root {
-    --cell: 70px;   /* further shrink for very small screens */
-    --gap: 8px;
-    --strike: 4px;
-  }
-  h1 { font-size: 1.5rem; }
-  .subtitle { font-size: 0.9rem; }
-  .panel { padding: 10px; border-radius: 12px; }
-  button { font-size: 0.9rem; padding: 6px 10px; border-radius: 10px; }
-  .choice-grid { gap: 8px; }
-  .choice-grid button { font-size: 1.05rem; }
-  .cell { font-size: 2rem; border-radius: 10px; }
-  .status { font-size: 1rem; }
+/* Center each active step on the screen */
+.panel {
+  background: rgba(255,255,255,.1);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  backdrop-filter: blur(4px);
+  margin: auto;        /* <-- centers vertically and horizontally */
+  width: 100%;
+  max-width: 450px;
 }
-    
-    *{box-sizing:border-box}
-    body {
-      font-family: 'Poppins', sans-serif;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; margin: 0;
-      color: white; text-align: center;
-      background: linear-gradient(45deg, #4568dc, #b06ab3);
-    }
-    h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; margin-bottom: 8px; }
-    .subtitle {opacity:.9;margin: 0 0 12px}
 
+  h1 {
+    font-size: clamp(1.5rem, 5vw, 2.2rem);
+    text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .subtitle {
+    opacity: .9;
+    margin: 0 0 12px;
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+
+  .hidden { display: none !important; }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 8px 0;
+  }
+
+  button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+    font-weight: 600;
+    color: black;
+    background: white;
+    transition: transform .15s, box-shadow .15s, background .15s;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.2);
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  button.mute {
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    color:#fff;
+  }
+
+  .ghost {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,.6);
+    color:#fff;
+  }
+
+  .choice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 10px;
+  }
+
+  .choice-grid button {
+    font-size: clamp(1rem, 5vw, 1.35rem);
+  }
+
+  .choice .active,
+  .difficulty .active {
+    outline: 3px solid #00eaff;
+    box-shadow: 0 0 15px #00eaff;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, var(--cell));
+    grid-template-rows: repeat(3, var(--cell));
+    gap: var(--gap);
+    margin-top: 12px;
+    position: relative;
+    justify-content: center;
+  }
+
+  .cell {
+    width: var(--cell);
+    height: var(--cell);
+    background: rgba(255,255,255,0.12);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(2rem, 10vw, 3rem);
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  }
+
+  .cell:hover {
+    transform: scale(1.06);
+    background: rgba(255,255,255,0.22);
+    box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+  }
+
+  .cell.win {
+    background: linear-gradient(135deg, #00ffcc, #00ccff);
+    box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff, 0 0 60px #00ccff;
+    animation: glowPulse 1s infinite alternate;
+  }
+
+  @keyframes glowPulse {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(1.15); opacity: 0.85; }
+  }
+
+  .status {
+    margin-top: 12px;
+    min-height: 28px;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    text-shadow: 0 0 8px #fff;
+  }
+
+  /* Strike line */
+  .strike {
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+    height: var(--strike);
+    border-radius: 3px;
+    opacity: 0;
+    animation: strikeAnim 0.6s forwards;
+    /* transform-origin is set by JS */
+  }
+
+  @keyframes strikeAnim {
+    from { width: 0; opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
     .panel {
-      background: rgba(255,255,255,.1);
-      padding: 16px; border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-      backdrop-filter: blur(4px);
-      margin-top: 8px;
+      padding: 12px;
     }
-    .hidden { display:none !important; }
+  }
+</style>
 
-    .controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: 8px 0; }
-    button { padding: 10px 16px; border: none; border-radius: 12px; cursor: pointer; font-size: 1rem; font-weight: 600; color: black; background: white; transition: transform .15s, box-shadow .15s, background .15s; }
-    button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,.2); }
-    button.mute { background: linear-gradient(45deg, #00c6ff, #0072ff); color:#fff; }
-    .ghost { background: transparent; border: 2px solid rgba(255,255,255,.6); color:#fff }
-
-    .choice-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 10px; }
-    .choice-grid button { font-size: 1.35rem; }
-
-    .choice .active, .difficulty .active {
-      outline: 3px solid #00eaff; box-shadow: 0 0 15px #00eaff;
-    }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, var(--cell));
-      grid-template-rows: repeat(3, var(--cell));
-      gap: var(--gap); margin-top: 12px; position: relative;
-    }
-    .cell {
-      width: var(--cell); height: var(--cell);
-      background: rgba(255,255,255,0.12);
-      border-radius: 15px; display: flex; align-items: center; justify-content: center;
-      font-size: 3rem; font-weight: bold; color: white; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-      box-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-    .cell:hover { transform: scale(1.06); background: rgba(255,255,255,0.22); box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff; }
-    .cell.win {
-      background: linear-gradient(135deg, #00ffcc, #00ccff);
-      box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff, 0 0 60px #00ccff;
-      animation: glowPulse 1s infinite alternate;
-    }
-    @keyframes glowPulse { from { transform: scale(1); opacity: 1; } to { transform: scale(1.15); opacity: 0.85; } }
-
-    .status { margin-top: 12px; min-height: 28px; font-size: 1.2rem; text-shadow: 0 0 8px #fff; }
-
-    /* Strike line */
-    .strike { position: absolute; background: #fff; box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff; height: var(--strike); border-radius: 3px; opacity: 0; animation: strikeAnim 0.6s forwards; }
-    @keyframes strikeAnim { from { width: 0; opacity: 0; } to { opacity: 1; } }
-  </style>
 </head>
 <body>
   <h1>⭐ Tic Tac Toe – AI Levels 🎮</h1>
   <p class="subtitle">Step 1 → Choose difficulty · Step 2 → Pick your emoji · Step 3 → Play!</p>
 
-  <!-- STEP 1: Difficulty -->
   <section id="step1" class="panel">
     <h3>Step 1: Choose Difficulty</h3>
     <div class="controls difficulty">
@@ -121,7 +204,6 @@ to me
     </div>
   </section>
 
-  <!-- STEP 2: Emoji/Symbol -->
   <section id="step2" class="panel hidden">
     <h3>Step 2: Pick Your Emoji</h3>
     <div id="emojiGrid" class="choice-grid choice"></div>
@@ -131,8 +213,7 @@ to me
     </div>
   </section>
 
-  <!-- STEP 3: Game -->
-  <section id="gameWrap" class="panel hidden" style="max-width: 430px;">
+  <section id="gameWrap" class="panel hidden">
     <div class="controls" style="margin-top:0">
       <button id="changeEmoji" class="ghost">🎭 Change Emoji</button>
       <button id="changeDiff" class="ghost">⚙️ Change Difficulty</button>
@@ -146,11 +227,10 @@ to me
     </div>
   </section>
 
-  <!-- Sounds -->
-  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
-  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
-  <audio id="drawSound" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3"></audio>
-  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3"></audio>
+  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
+  <audio id="drawSound" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3" preload="auto"></audio>
+  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3" preload="auto"></audio>
 
   <script>
     // ---------- Elements
@@ -252,7 +332,9 @@ to me
       restartBtn.classList.add('hidden');
 
       // State
-      gameActive = true; humanTurn = true; cells = Array(9).fill("");
+      cells.fill("");
+      gameActive = true;
+      humanTurn = true;
 
       statusEl.textContent = `🎬 Match Started! You (${human}) vs 🤖 (${ai}) — Your turn!`;
       playSound('startSound');
@@ -286,11 +368,14 @@ to me
         const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
         move = empty[Math.floor(Math.random()*empty.length)];
       } else if (difficulty === 'medium') {
+        // 50% chance of being random, 50% chance of being smart
         if (Math.random() < 0.5) {
           const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
           move = empty[Math.floor(Math.random()*empty.length)];
         } else { move = bestMove(); }
-      } else { move = bestMove(); }
+      } else { // Hard
+        move = bestMove();
+      }
 
       placeSymbol(move, ai);
       if (endIfNeeded(ai)) return;
@@ -345,31 +430,51 @@ to me
       return false;
     }
 
-    function positionStrike(strike, line){
-      const cellSize = 120 + 12; // keep in sync with CSS vars
-      const boardSize = cellSize * 3 - 12;
-      const map = {
-        '0,1,2': { top: cellSize/2 - 3 + 'px', left: '0', width: boardSize + 'px', transform: 'none' },
-        '3,4,5': { top: cellSize*1.5 - 3 + 'px', left: '0', width: boardSize + 'px', transform: 'none' },
-        '6,7,8': { top: cellSize*2.5 - 3 + 'px', left: '0', width: boardSize + 'px', transform: 'none' },
-        '0,3,6': { top: '0', left: cellSize/2 - 3 + 'px', height: boardSize + 'px', width: '6px', transform: 'none' },
-        '1,4,7': { top: '0', left: cellSize*1.5 - 3 + 'px', height: boardSize + 'px', width: '6px', transform: 'none' },
-        '2,5,8': { top: '0', left: cellSize*2.5 - 3 + 'px', height: boardSize + 'px', width: '6px', transform: 'none' },
-        '0,4,8': { top: '0', left: '0', width: boardSize * 1.42 + 'px', transform: 'rotate(45deg)', transformOrigin: 'top left' },
-        '2,4,6': { top: '0', left: boardSize + 'px', width: boardSize * 1.42 + 'px', transform: 'rotate(-45deg)', transformOrigin: 'top right' },
-      };
-      Object.assign(strike.style, map[line.join(',')]);
+    // --- FIX 2: REWRITTEN DYNAMIC STRIKE POSITIONING ---
+    function positionStrike(strike, line) {
+        // Get the computed size of a cell and the gap from the DOM
+        const firstCell = boardEl.querySelector('.cell');
+        if (!firstCell) return; // Safety check
+
+        const cellSize = firstCell.offsetWidth;
+        const gap = parseFloat(getComputedStyle(boardEl).gap);
+        const boardSize = (cellSize * 3) + (gap * 2);
+
+        // Get strike thickness from CSS variable for consistency
+        const strikeThickness = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strike'));
+        const halfStrike = strikeThickness / 2;
+        const diagonalLength = Math.sqrt(2 * Math.pow(boardSize, 2));
+
+        const positions = {
+            '0,1,2': { top: `${cellSize/2 - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
+            '3,4,5': { top: `${(cellSize * 1.5) + gap - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
+            '6,7,8': { top: `${(cellSize * 2.5) + (gap * 2) - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
+            '0,3,6': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + cellSize/2}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
+            '1,4,7': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + (cellSize * 1.5) + gap}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
+            '2,5,8': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + (cellSize * 2.5) + (gap * 2)}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
+            '0,4,8': { top: '0px', left: '0px', width: `${diagonalLength}px`, transform: 'rotate(45deg)', transformOrigin: 'top left' },
+            '2,4,6': { top: '0px', right: '0px', width: `${diagonalLength}px`, transform: 'rotate(-45deg)', transformOrigin: 'top right' },
+        };
+
+        const key = line.join(',');
+        if (positions[key]) {
+            Object.assign(strike.style, positions[key]);
+        }
     }
 
     restartBtn.addEventListener('click', ()=>{
-      initBoard(); statusEl.textContent = `👉 Your turn (${human})`; gameActive=true; humanTurn=true; restartBtn.classList.add('hidden');
+      cells.fill("");
+      initBoard();
+      statusEl.textContent = `👉 Your turn (${human})`;
+      gameActive=true;
+      humanTurn=true;
+      restartBtn.classList.add('hidden');
     });
 
-    function playSound(id){ if(!mute){ const s=document.getElementById(id); s.currentTime=0; s.play(); } }
+    function playSound(id){ if(!mute){ const s=document.getElementById(id); s.currentTime=0; s.play().catch(e => console.log("Sound play failed:", e)); } }
 
     // Init page
     buildEmojiGrid();
   </script>
 </body>
 </html>
-
