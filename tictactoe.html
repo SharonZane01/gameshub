@@ -7,6 +7,41 @@
     :root{
       --gap:12px; --cell:120px; --strike:6px;
     }
+
+Dhanakodi
+	
+5:04 PM (0 minutes ago)
+	
+to me
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :root {
+    --cell: 90px;   /* shrink cells */
+    --gap: 10px;
+  }
+  h1 { font-size: 1.8rem; }
+  .panel { padding: 12px; }
+  .choice-grid button { font-size: 1.2rem; padding: 8px 12px; }
+  button { font-size: 0.95rem; padding: 8px 12px; }
+  .cell { font-size: 2.4rem; border-radius: 12px; }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --cell: 70px;   /* further shrink for very small screens */
+    --gap: 8px;
+    --strike: 4px;
+  }
+  h1 { font-size: 1.5rem; }
+  .subtitle { font-size: 0.9rem; }
+  .panel { padding: 10px; border-radius: 12px; }
+  button { font-size: 0.9rem; padding: 6px 10px; border-radius: 10px; }
+  .choice-grid { gap: 8px; }
+  .choice-grid button { font-size: 1.05rem; }
+  .cell { font-size: 2rem; border-radius: 10px; }
+  .status { font-size: 1rem; }
+}
+    
     *{box-sizing:border-box}
     body {
       font-family: 'Poppins', sans-serif;
@@ -337,3 +372,4 @@
   </script>
 </body>
 </html>
+
