@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tic Tac Toe – Step by Step</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic Tac Toe – Game </title>
 <style>
   :root {
     --gap: clamp(6px, 2vw, 12px);
-    --cell: clamp(70px, 22vw, 120px);  /* Auto scales for mobile & desktop */
+    --cell: clamp(70px, 22vw, 120px);
     --strike: 6px;
   }
 
@@ -23,6 +23,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 /* Center each active step on the screen */
@@ -32,166 +33,154 @@ body {
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
   backdrop-filter: blur(4px);
-  margin: auto;        /* <-- centers vertically and horizontally */
   width: 100%;
   max-width: 450px;
+  margin: auto;
 }
 
-  h1 {
-    font-size: clamp(1.5rem, 5vw, 2.2rem);
-    text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
-    margin-bottom: 8px;
-  }
+h1 {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff;
+  margin-bottom: 8px;
+}
 
-  h3 {
-    margin-top: 0;
-  }
+.subtitle {
+  opacity: .9;
+  margin: 0 0 12px;
+  font-size: clamp(0.8rem, 3vw, 1rem);
+}
 
-  .subtitle {
-    opacity: .9;
-    margin: 0 0 12px;
-    font-size: clamp(0.8rem, 3vw, 1rem);
-  }
+.hidden { display: none !important; }
 
-  .hidden { display: none !important; }
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 8px 0;
+}
 
-  .controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 8px 0;
-  }
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
+  font-weight: 600;
+  color: black;
+  background: white;
+  transition: transform .15s, box-shadow .15s, background .15s;
+}
 
-  button {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: clamp(0.8rem, 3.5vw, 1rem);
-    font-weight: 600;
-    color: black;
-    background: white;
-    transition: transform .15s, box-shadow .15s, background .15s;
-  }
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
+}
 
-  button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0,0,0,.2);
-  }
+button.mute {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  color:#fff;
+}
 
-  button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
+.ghost {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,.6);
+  color:#fff;
+}
 
-  button.mute {
-    background: linear-gradient(45deg, #00c6ff, #0072ff);
-    color:#fff;
-  }
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 10px;
+}
 
-  .ghost {
-    background: transparent;
-    border: 2px solid rgba(255,255,255,.6);
-    color:#fff;
-  }
+.choice-grid button {
+  font-size: clamp(1rem, 5vw, 1.35rem);
+}
 
-  .choice-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-    gap: 10px;
-  }
+.choice .active,
+.difficulty .active {
+  outline: 3px solid #00eaff;
+  box-shadow: 0 0 15px #00eaff;
+}
 
-  .choice-grid button {
-    font-size: clamp(1rem, 5vw, 1.35rem);
-  }
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell));
+  grid-template-rows: repeat(3, var(--cell));
+  gap: var(--gap);
+  margin-top: 12px;
+  position: relative;
+  justify-content: center;
+}
 
-  .choice .active,
-  .difficulty .active {
-    outline: 3px solid #00eaff;
-    box-shadow: 0 0 15px #00eaff;
-  }
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  background: rgba(255,255,255,0.12);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(2rem, 10vw, 3rem);
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
 
-  .board {
-    display: grid;
-    grid-template-columns: repeat(3, var(--cell));
-    grid-template-rows: repeat(3, var(--cell));
-    gap: var(--gap);
-    margin-top: 12px;
-    position: relative;
-    justify-content: center;
-  }
+.cell:hover {
+  transform: scale(1.06);
+  background: rgba(255,255,255,0.22);
+  box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+}
 
-  .cell {
-    width: var(--cell);
-    height: var(--cell);
-    background: rgba(255,255,255,0.12);
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(2rem, 10vw, 3rem);
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-    box-shadow: 0 0 10px rgba(255,255,255,0.3);
-  }
+.cell.win {
+  background: linear-gradient(135deg, #00ffcc, #00ccff);
+  box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff, 0 0 60px #00ccff;
+  animation: glowPulse 1s infinite alternate;
+}
 
-  .cell:hover {
-    transform: scale(1.06);
-    background: rgba(255,255,255,0.22);
-    box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
-  }
+@keyframes glowPulse {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(1.15); opacity: 0.85; }
+}
 
-  .cell.win {
-    background: linear-gradient(135deg, #00ffcc, #00ccff);
-    box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff, 0 0 60px #00ccff;
-    animation: glowPulse 1s infinite alternate;
-  }
+.status {
+  margin-top: 12px;
+  min-height: 28px;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  text-shadow: 0 0 8px #fff;
+}
 
-  @keyframes glowPulse {
-    from { transform: scale(1); opacity: 1; }
-    to { transform: scale(1.15); opacity: 0.85; }
-  }
+/* Strike line */
+.strike {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+  height: var(--strike);
+  border-radius: 3px;
+  opacity: 0;
+  animation: strikeAnim 0.6s forwards;
+}
 
-  .status {
-    margin-top: 12px;
-    min-height: 28px;
-    font-size: clamp(1rem, 4vw, 1.2rem);
-    text-shadow: 0 0 8px #fff;
-  }
+@keyframes strikeAnim {
+  from { width: 0; opacity: 0; }
+  to { opacity: 1; }
+}
 
-  /* Strike line */
-  .strike {
-    position: absolute;
-    background: #fff;
-    box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
-    height: var(--strike);
-    border-radius: 3px;
-    opacity: 0;
-    animation: strikeAnim 0.6s forwards;
-    /* transform-origin is set by JS */
-  }
-
-  @keyframes strikeAnim {
-    from { width: 0; opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* Mobile tweaks */
-  @media (max-width: 480px) {
-    .panel {
-      padding: 12px;
-    }
-  }
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .panel { padding: 12px; }
+}
 </style>
-
 </head>
 <body>
   <h1>⭐ Tic Tac Toe – AI Levels 🎮</h1>
   <p class="subtitle">Step 1 → Choose difficulty · Step 2 → Pick your emoji · Step 3 → Play!</p>
 
+  <!-- STEP 1: Difficulty -->
   <section id="step1" class="panel">
     <h3>Step 1: Choose Difficulty</h3>
     <div class="controls difficulty">
@@ -204,6 +193,7 @@ body {
     </div>
   </section>
 
+  <!-- STEP 2: Emoji/Symbol -->
   <section id="step2" class="panel hidden">
     <h3>Step 2: Pick Your Emoji</h3>
     <div id="emojiGrid" class="choice-grid choice"></div>
@@ -213,6 +203,7 @@ body {
     </div>
   </section>
 
+  <!-- STEP 3: Game -->
   <section id="gameWrap" class="panel hidden">
     <div class="controls" style="margin-top:0">
       <button id="changeEmoji" class="ghost">🎭 Change Emoji</button>
@@ -227,13 +218,13 @@ body {
     </div>
   </section>
 
-  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
-  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3" preload="auto"></audio>
-  <audio id="drawSound" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3" preload="auto"></audio>
-  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3" preload="auto"></audio>
+  <!-- Sounds -->
+  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+  <audio id="drawSound" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3"></audio>
+  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3"></audio>
 
   <script>
-    // ---------- Elements
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     const gameWrap = document.getElementById('gameWrap');
@@ -249,18 +240,16 @@ body {
     const emojiGrid = document.getElementById('emojiGrid');
     const muteBtn = document.getElementById('muteBtn');
 
-    // ---------- State
     let mute = false;
     let cells = Array(9).fill("");
-    let human = null; let ai = null;
+    let human = null, ai = null;
     let difficulty = null;
-    let gameActive = false; let humanTurn = true;
+    let gameActive = false, humanTurn = true;
 
-    // ---------- Data
     const ALL_EMOJIS = ["❌","⭕","🍕","🚗","🐱","⚽","💎","🎸","🐍","🌈","🔥","👑","🦄","🎯","🍩","🚀"];
     const WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
-    // Build emoji buttons
+    // Build emoji grid
     function buildEmojiGrid(){
       emojiGrid.innerHTML = '';
       ALL_EMOJIS.forEach(e=>{
@@ -277,7 +266,7 @@ body {
       startMatchBtn.disabled = false;
     }
 
-    // Difficulty step: enable Next only after choice
+    // Difficulty selection
     step1.querySelectorAll('[data-diff]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         difficulty = btn.dataset.diff;
@@ -286,194 +275,93 @@ body {
       });
     });
 
-    toStep2Btn.addEventListener('click', ()=>{
-      step1.classList.add('hidden');
-      step2.classList.remove('hidden');
-    });
-    backTo1Btn.addEventListener('click', ()=>{
-      step2.classList.add('hidden');
-      step1.classList.remove('hidden');
-    });
+    toStep2Btn.addEventListener('click', ()=>{ step1.classList.add('hidden'); step2.classList.remove('hidden'); });
+    backTo1Btn.addEventListener('click', ()=>{ step2.classList.add('hidden'); step1.classList.remove('hidden'); });
 
     startMatchBtn.addEventListener('click', ()=>{
-      if(!difficulty){ alert('Please choose a difficulty first.'); return; }
-      if(!human){ alert('Please pick your emoji.'); return; }
+      if(!difficulty || !human) return alert('Pick difficulty and emoji first.');
       startGame();
     });
 
-    changeEmojiBtn.addEventListener('click', ()=>{
-      // Keep difficulty, re-pick emoji
-      gameWrap.classList.add('hidden');
-      step2.classList.remove('hidden');
-    });
-    changeDiffBtn.addEventListener('click', ()=>{
-      // Re-pick difficulty from scratch
-      gameWrap.classList.add('hidden');
-      step1.classList.remove('hidden');
-    });
+    changeEmojiBtn.addEventListener('click', ()=>{ gameWrap.classList.add('hidden'); step2.classList.remove('hidden'); });
+    changeDiffBtn.addEventListener('click', ()=>{ gameWrap.classList.add('hidden'); step1.classList.remove('hidden'); });
+    newMatchBtn.addEventListener('click', ()=>{ gameWrap.classList.add('hidden'); step2.classList.remove('hidden'); });
+    muteBtn.addEventListener('click', ()=>{ mute = !mute; muteBtn.textContent = mute? '🔇 Sound Off':'🔊 Sound On'; });
 
-    newMatchBtn.addEventListener('click', ()=>{
-      // New match = go to emoji pick with same difficulty
-      gameWrap.classList.add('hidden');
-      step2.classList.remove('hidden');
-    });
-
-    muteBtn.addEventListener('click', ()=>{ mute = !mute; muteBtn.textContent = mute? '🔇 Sound Off' : '🔊 Sound On'; });
-
-    // ---------- Game logic
     function startGame(){
-      // Pick AI different from human
       const available = ALL_EMOJIS.filter(s=>s!==human);
       ai = available[Math.floor(Math.random()*available.length)];
-
-      // UI
-      step2.classList.add('hidden');
-      gameWrap.classList.remove('hidden');
-      restartBtn.classList.add('hidden');
-
-      // State
-      cells.fill("");
-      gameActive = true;
-      humanTurn = true;
-
+      step2.classList.add('hidden'); gameWrap.classList.remove('hidden'); restartBtn.classList.add('hidden');
+      gameActive = true; humanTurn = true; cells = Array(9).fill("");
       statusEl.textContent = `🎬 Match Started! You (${human}) vs 🤖 (${ai}) — Your turn!`;
-      playSound('startSound');
-      initBoard();
+      playSound('startSound'); initBoard();
     }
 
     function initBoard(){
       boardEl.innerHTML = '';
       for(let i=0;i<9;i++){
         const cell=document.createElement('div');
-        cell.className='cell';
-        cell.dataset.index=i;
-        cell.addEventListener('click',()=>{
-          if(!gameActive || !humanTurn || cells[i]!=="") return;
-          playerMove(i);
-        });
+        cell.className='cell'; cell.dataset.index=i;
+        cell.addEventListener('click',()=>{ if(gameActive && humanTurn && cells[i]==="") playerMove(i); });
         boardEl.appendChild(cell);
       }
     }
 
-    function playerMove(index){
-      placeSymbol(index, human);
-      if (endIfNeeded(human)) return;
-      humanTurn=false; statusEl.textContent=`🤖 Computer's turn (${ai})...`;
-      setTimeout(aiMove, 400);
-    }
-
+    function playerMove(i){ placeSymbol(i,human); if(endIfNeeded(human)) return; humanTurn=false; statusEl.textContent=`🤖 Computer's turn (${ai})...`; setTimeout(aiMove,400);}
     function aiMove(){
       let move;
-      if (difficulty === 'easy') {
-        const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
-        move = empty[Math.floor(Math.random()*empty.length)];
-      } else if (difficulty === 'medium') {
-        // 50% chance of being random, 50% chance of being smart
-        if (Math.random() < 0.5) {
-          const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
-          move = empty[Math.floor(Math.random()*empty.length)];
-        } else { move = bestMove(); }
-      } else { // Hard
-        move = bestMove();
-      }
-
-      placeSymbol(move, ai);
-      if (endIfNeeded(ai)) return;
-      humanTurn=true; statusEl.textContent=`👉 Your turn (${human})`;
+      if(difficulty==='easy'){ const empty=cells.map((v,i)=>v===""?i:null).filter(v=>v!==null); move=empty[Math.floor(Math.random()*empty.length)]; }
+      else if(difficulty==='medium'){ if(Math.random()<0.5){ const empty=cells.map((v,i)=>v===""?i:null).filter(v=>v!==null); move=empty[Math.floor(Math.random()*empty.length)]; } else move=bestMove(); }
+      else move=bestMove();
+      placeSymbol(move,ai); if(endIfNeeded(ai)) return; humanTurn=true; statusEl.textContent=`👉 Your turn (${human})`;
     }
 
-    function placeSymbol(index, symbol){
-      cells[index]=symbol; const el=boardEl.querySelector(`[data-index='${index}']`);
-      el.textContent=symbol; playSound('moveSound');
+    function placeSymbol(i,symbol){ cells[i]=symbol; boardEl.querySelector(`[data-index='${i}']`).textContent=symbol; playSound('moveSound'); }
+    function bestMove(){ let best=-Infinity, move; for(let i=0;i<9;i++){ if(cells[i]===""){ cells[i]=ai; let score=minimax(cells,0,false,-Infinity,+Infinity); cells[i]=""; if(score>best){ best=score; move=i; } } } return move; }
+    function minimax(board,d,isMax,a,b){ if(checkWin(ai,board)) return 10-d; if(checkWin(human,board)) return d-10; if(board.every(c=>c!=="")) return 0;
+      if(isMax){ let best=-Infinity; for(let i=0;i<9;i++){ if(board[i]===""){ board[i]=ai; let s=minimax(board,d+1,false,a,b); board[i]=""; best=Math.max(best,s); a=Math.max(a,best); if(b<=a) break; } } return best; }
+      else { let best=+Infinity; for(let i=0;i<9;i++){ if(board[i]===""){ board[i]=human; let s=minimax(board,d+1,true,a,b); board[i]=""; best=Math.min(best,s); b=Math.min(b,best); if(b<=a) break; } } return best; }
     }
-
-    function bestMove(){
-      let bestScore=-Infinity, move;
-      for(let i=0;i<9;i++){
-        if(cells[i]===""){ cells[i]=ai; const score=minimax(cells,0,false,-Infinity,+Infinity); cells[i]=""; if(score>bestScore){bestScore=score; move=i;} }
-      }
-      return move;
-    }
-
-    function minimax(board, depth, isMax, alpha, beta){
-      if(checkWin(ai, board)) return 10 - depth;
-      if(checkWin(human, board)) return depth - 10;
-      if(board.every(c=>c!=="")) return 0;
-
-      if(isMax){
-        let best=-Infinity;
-        for(let i=0;i<9;i++) if(board[i]===""){ board[i]=ai; const s=minimax(board, depth+1, false, alpha, beta); board[i]=""; best=Math.max(best,s); alpha=Math.max(alpha,best); if(beta<=alpha) break; }
-        return best;
-      } else {
-        let best=+Infinity;
-        for(let i=0;i<9;i++) if(board[i]===""){ board[i]=human; const s=minimax(board, depth+1, true, alpha, beta); board[i]=""; best=Math.min(best,s); beta=Math.min(beta,best); if(beta<=alpha) break; }
-        return best;
-      }
-    }
-
-    function checkWin(player, board=cells){ return WINS.some(line=>line.every(i=>board[i]===player)); }
+    function checkWin(player,board=cells){ return WINS.some(line=>line.every(i=>board[i]===player)); }
 
     function endIfNeeded(player){
       for(const line of WINS){
         if(line.every(i=>cells[i]===player)){
           line.forEach(i=>boardEl.querySelector(`[data-index='${i}']`).classList.add('win'));
           const strike=document.createElement('div'); strike.className='strike'; boardEl.appendChild(strike);
-          positionStrike(strike, line);
-          statusEl.textContent = player===human? '🎉🏆 You Win! ✨' : '💀🤖 Computer Wins!';
+          positionStrike(strike,line);
+          statusEl.textContent = player===human? '🎉🏆 You Win! ✨':'💀🤖 Computer Wins!';
           gameActive=false; playSound('winSound'); restartBtn.classList.remove('hidden');
           return true;
         }
       }
-      if(cells.every(c=>c!=='')){
-        statusEl.textContent='😐 It\'s a Draw! 🤝'; gameActive=false; playSound('drawSound'); restartBtn.classList.remove('hidden'); return true;
-      }
+      if(cells.every(c=>c!=="")){ statusEl.textContent="😐 It's a Draw! 🤝"; gameActive=false; playSound('drawSound'); restartBtn.classList.remove('hidden'); return true; }
       return false;
     }
 
-    // --- FIX 2: REWRITTEN DYNAMIC STRIKE POSITIONING ---
-    function positionStrike(strike, line) {
-        // Get the computed size of a cell and the gap from the DOM
-        const firstCell = boardEl.querySelector('.cell');
-        if (!firstCell) return; // Safety check
+function positionStrike(strike, line) {
+  const cellsEls = Array.from(document.querySelectorAll('.cell'));
+  const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
+  const cellSize = cellsEls[0].offsetWidth;
 
-        const cellSize = firstCell.offsetWidth;
-        const gap = parseFloat(getComputedStyle(boardEl).gap);
-        const boardSize = (cellSize * 3) + (gap * 2);
+  const positions = {
+    '0,1,2': { top: cellsEls[0].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[0].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
+    '3,4,5': { top: cellsEls[3].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[3].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
+    '6,7,8': { top: cellsEls[6].offsetTop + cellSize/2 - 3 + 'px', left: cellsEls[6].offsetLeft + 'px', width: `calc(100% - ${gap*2}px)`, height: '6px', transform: 'none' },
+    '0,3,6': { top: cellsEls[0].offsetTop + 'px', left: cellsEls[0].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
+    '1,4,7': { top: cellsEls[1].offsetTop + 'px', left: cellsEls[1].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
+    '2,5,8': { top: cellsEls[2].offsetTop + 'px', left: cellsEls[2].offsetLeft + cellSize/2 - 3 + 'px', width: '6px', height: `calc(100% - ${gap*2}px)`, transform: 'none' },
+    '0,4,8': { top: cellsEls[0].offsetTop + 'px', left: cellsEls[0].offsetLeft + 'px', width: `calc(100% * 1.414)`, height: '6px', transform: 'rotate(45deg)', transformOrigin: 'top left' },
+    '2,4,6': { top: cellsEls[2].offsetTop + 'px', left: cellsEls[2].offsetLeft + 'px', width: `calc(100% * 1.414)`, height: '6px', transform: 'rotate(-45deg)', transformOrigin: 'top left' },
+  };
 
-        // Get strike thickness from CSS variable for consistency
-        const strikeThickness = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strike'));
-        const halfStrike = strikeThickness / 2;
-        const diagonalLength = Math.sqrt(2 * Math.pow(boardSize, 2));
+  Object.assign(strike.style, positions[line.join(',')]);
+  strike.style.opacity = 1; // make sure it's visible
+}
 
-        const positions = {
-            '0,1,2': { top: `${cellSize/2 - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
-            '3,4,5': { top: `${(cellSize * 1.5) + gap - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
-            '6,7,8': { top: `${(cellSize * 2.5) + (gap * 2) - halfStrike}px`, left: '0px', width: `${boardSize}px`, transform: 'none' },
-            '0,3,6': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + cellSize/2}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
-            '1,4,7': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + (cellSize * 1.5) + gap}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
-            '2,5,8': { top: `${boardSize/2 - halfStrike}px`, left: `${-(boardSize/2) + (cellSize * 2.5) + (gap * 2)}px`, height: `${strikeThickness}px`, width: `${boardSize}px`, transform: 'rotate(90deg)' },
-            '0,4,8': { top: '0px', left: '0px', width: `${diagonalLength}px`, transform: 'rotate(45deg)', transformOrigin: 'top left' },
-            '2,4,6': { top: '0px', right: '0px', width: `${diagonalLength}px`, transform: 'rotate(-45deg)', transformOrigin: 'top right' },
-        };
+    restartBtn.addEventListener('click', ()=>{ initBoard(); statusEl.textContent=`👉 Your turn (${human})`; gameActive=true; humanTurn=true; restartBtn.classList.add('hidden'); });
+    function playSound(id){ if(mute) return; const s=document.getElementById(id); s.currentTime=0; s.play(); }
 
-        const key = line.join(',');
-        if (positions[key]) {
-            Object.assign(strike.style, positions[key]);
-        }
-    }
-
-    restartBtn.addEventListener('click', ()=>{
-      cells.fill("");
-      initBoard();
-      statusEl.textContent = `👉 Your turn (${human})`;
-      gameActive=true;
-      humanTurn=true;
-      restartBtn.classList.add('hidden');
-    });
-
-    function playSound(id){ if(!mute){ const s=document.getElementById(id); s.currentTime=0; s.play().catch(e => console.log("Sound play failed:", e)); } }
-
-    // Init page
     buildEmojiGrid();
   </script>
 </body>
