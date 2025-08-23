@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tic Tac Toe – AI Levels</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100vh; margin: 0;
+      color: white; text-align: center;
+background: linear-gradient(45deg,
+#4568dc,
+
+#b06ab3);    
+    }
+    h1 { font-size: 2.2rem; text-shadow: 0 0 10px #00eaff, 0 0 20px #00eaff; margin-bottom: 16px; }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 120px);
+      grid-template-rows: repeat(3, 120px);
+      gap: 12px; margin-top: 16px;
+      position: relative;
+    }
+    .cell {
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px; display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; font-weight: bold; color: white; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+    .cell:hover { transform: scale(1.06); background: rgba(255,255,255,0.2); box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff; }
+    .cell.win {
+      background: linear-gradient(135deg, #00ffcc, #00ccff);
+      box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff, 0 0 60px #00ccff;
+      animation: glowPulse 1s infinite alternate;
+    }
+    @keyframes glowPulse {
+      from { transform: scale(1); opacity: 1; }
+      to   { transform: scale(1.15); opacity: 0.85; }
+    }
+    .status { margin-top: 18px; min-height: 28px; font-size: 1.4rem; text-shadow: 0 0 8px #fff; }
+    .controls { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    button { padding: 10px 18px; border: none; border-radius: 12px; cursor: pointer; font-size: 1rem; font-weight: 600; color: black; background: white; }
+    button:hover { transform: scale(1.04); }
+    button.mute { background: linear-gradient(45deg, #00c6ff, #0072ff); }
+    /* Strike line */
+    .strike {
+      position: absolute;
+      background: #fff;
+      box-shadow: 0 0 15px #00eaff, 0 0 30px #00eaff;
+      height: 6px;
+      border-radius: 3px;
+      opacity: 0;
+      animation: strikeAnim 0.6s forwards;
+    }
+    @keyframes strikeAnim {
+      from { width: 0; opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Hide restart initially */
+    #restartBtn { display: none; }
+  </style>
+</head>
+<body>
+  <h1>⭐ Tic Tac Toe – AI Levels 🎮</h1>
+
+  <!-- Difficulty chooser -->
+  <div class="controls">
+    <button onclick="setDifficulty('easy')">😃 Easy</button>
+    <button onclick="setDifficulty('medium')">😐 Medium</button>
+    <button onclick="setDifficulty('hard')">😈 Hard</button>
+  </div>
+
+  <!-- Symbol chooser -->
+  <div class="controls">
+    <button onclick="choose('❌')">❌</button>
+    <button onclick="choose('⭕')">⭕</button>
+    <button onclick="choose('🍕')">🍕</button>
+    <button onclick="choose('🚗')">🚗</button>
+    <button onclick="choose('🐱')">🐱</button>
+    <button onclick="choose('⚽')">⚽</button>
+    <button onclick="choose('💎')">💎</button>
+    <button onclick="choose('🎸')">🎸</button>
+    <button onclick="choose('🐍')">🐍</button>
+    <button onclick="choose('🌈')">🌈</button>
+    <button onclick="choose('🔥')">🔥</button>
+    <button onclick="choose('👑')">👑</button>
+    <button onclick="choose('🦄')">🦄</button>
+    <button onclick="choose('🎯')">🎯</button>
+    <button onclick="choose('🍩')">🍩</button>
+    <button onclick="choose('🚀')">🚀</button>
+  </div>
+
+  <!-- Game board -->
+  <div class="board"></div>
+  <div class="status">✨ Pick your symbol to start!</div>
+
+  <!-- Restart & Mute -->
+  <div class="controls">
+    <button id="restartBtn" onclick="resetGame()">🔄 Restart</button>
+    <button class="mute" onclick="toggleMute()">🔊 Sound On</button>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="moveSound" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+  <audio id="drawSound" src="https://assets.mixkit.co/active_storage/sfx/2042/2042-preview.mp3"></audio>
+  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2016/2016-preview.mp3"></audio>
+
+  <script>
+    const boardEl   = document.querySelector(".board");
+    const statusEl  = document.querySelector(".status");
+    const restartBtn= document.getElementById("restartBtn");
+    let mute = false;
+
+    let cells = ["", "", "", "", "", "", "", "", ""];
+    let human = null;
+    let ai    = null;
+    let difficulty = "hard";  // default
+    let gameActive = false;
+    let humanTurn  = true;
+
+    function setDifficulty(level) {
+      difficulty = level;
+      statusEl.textContent = `⚙️ Difficulty set to: ${level.toUpperCase()} ${level==='easy'?'😃':level==='medium'?'😐':'😈'}`;
+    }
+
+    function choose(symbol) {
+      human = symbol;
+      const all = ["❌","⭕","🍕","🚗","🐱","⚽","💎","🎸","🐍","🌈","🔥","👑","🦄","🎯","🍩","🚀"];
+      const available = all.filter(s => s !== human);
+      ai = available[Math.floor(Math.random() * available.length)];
+      gameActive = true;
+      humanTurn = true;
+      statusEl.textContent = `🎬 Match Started! 👤 You (${human}) vs 🤖 Computer (${ai}) — Your turn!`;
+      playSound("startSound");
+      initBoard();
+      restartBtn.style.display = "none"; // hide restart at game start
+    }
+
+    function initBoard() {
+      boardEl.innerHTML = "";
+      cells = ["", "", "", "", "", "", "", "", ""];
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.index = i;
+        cell.addEventListener("click", () => {
+          if (!gameActive || !humanTurn || cells[i] !== "") return;
+          playerMove(i);
+        });
+        boardEl.appendChild(cell);
+      }
+    }
+
+    function playSound(id) {
+      if (!mute) {
+        const sound = document.getElementById(id);
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
+
+    function playerMove(index) {
+      placeSymbol(index, human);
+      if (endIfNeeded(human)) return;
+
+      humanTurn = false;
+      statusEl.textContent = `🤖 Computer's turn (${ai})...`;
+      setTimeout(aiMove, 400);
+    }
+
+    function aiMove() {
+      let move;
+      if (difficulty === "easy") {
+        const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
+        move = empty[Math.floor(Math.random()*empty.length)];
+      }
+      else if (difficulty === "medium") {
+        if (Math.random() < 0.5) {
+          const empty = cells.map((v,i)=>v===""?i:null).filter(v=>v!==null);
+          move = empty[Math.floor(Math.random()*empty.length)];
+        } else {
+          move = bestMove();
+        }
+      }
+      else {
+        move = bestMove();
+      }
+
+      placeSymbol(move, ai);
+      if (endIfNeeded(ai)) return;
+      humanTurn = true;
+      statusEl.textContent = `👉 Your turn (${human})`;
+    }
+
+    function placeSymbol(index, symbol) {
+      cells[index] = symbol;
+      const el = boardEl.querySelector(`[data-index='${index}']`);
+      el.textContent = symbol;
+      playSound("moveSound");
+    }
+
+    function bestMove() {
+      let bestScore = -Infinity, move;
+      for (let i = 0; i < 9; i++) {
+        if (cells[i] === "") {
+          cells[i] = ai;
+          let score = minimax(cells, 0, false, -Infinity, +Infinity);
+          cells[i] = "";
+          if (score > bestScore) { bestScore = score; move = i; }
+        }
+      }
+      return move;
+    }
+
+    function minimax(board, depth, isMax, alpha, beta) {
+      if (checkWin(ai, board)) return 10 - depth;
+      if (checkWin(human, board)) return depth - 10;
+      if (board.every(c => c !== "")) return 0;
+
+      if (isMax) {
+        let best = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (board[i] === "") {
+            board[i] = ai;
+            let score = minimax(board, depth+1, false, alpha, beta);
+            board[i] = "";
+            best = Math.max(best, score);
+            alpha = Math.max(alpha, best);
+            if (beta <= alpha) break;
+          }
+        }
+        return best;
+      } else {
+        let best = +Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (board[i] === "") {
+            board[i] = human;
+            let score = minimax(board, depth+1, true, alpha, beta);
+            board[i] = "";
+            best = Math.min(best, score);
+            beta = Math.min(beta, best);
+            if (beta <= alpha) break;
+          }
+        }
+        return best;
+      }
+    }
+
+    function checkWin(player, board=cells) {
+      const W = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      return W.some(line => line.every(i => board[i]===player));
+    }
+
+    function endIfNeeded(player) {
+      const W = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      for (let line of W) {
+        if (line.every(i => cells[i] === player)) {
+          line.forEach(i => boardEl.querySelector(`[data-index='${i}']`).classList.add("win"));
+          const strike = document.createElement("div");
+          strike.className = "strike";
+          boardEl.appendChild(strike);
+          positionStrike(strike, line);
+          statusEl.textContent = player===human ? "🎉🏆 You Win! ✨" : "💀🤖 Computer Wins!";
+          gameActive = false;
+          playSound("winSound");
+          restartBtn.style.display = "inline-block"; // show restart after finish
+          return true;
+        }
+      }
+      if (cells.every(c=>c!=="")) {
+        statusEl.textContent = "😐 It's a Draw! 🤝";
+        gameActive = false;
+        playSound("drawSound");
+        restartBtn.style.display = "inline-block"; // show restart after draw
+        return true;
+      }
+      return false;
+    }
+
+    function positionStrike(strike, line) {
+      const cellSize = 120 + 12;
+      const boardSize = cellSize * 3 - 12;
+      const positions = {
+        "0,1,2": { top: cellSize / 2 - 3 + "px", left: "0", width: boardSize + "px", transform: "none" },
+        "3,4,5": { top: cellSize * 1.5 - 3 + "px", left: "0", width: boardSize + "px", transform: "none" },
+        "6,7,8": { top: cellSize * 2.5 - 3 + "px", left: "0", width: boardSize + "px", transform: "none" },
+        "0,3,6": { top: "0", left: cellSize / 2 - 3 + "px", height: boardSize + "px", width: "6px", transform: "none" },
+        "1,4,7": { top: "0", left: cellSize * 1.5 - 3 + "px", height: boardSize + "px", width: "6px", transform: "none" },
+        "2,5,8": { top: "0", left: cellSize * 2.5 - 3 + "px", height: boardSize + "px", width: "6px", transform: "none" },
+        "0,4,8": { top: "0", left: "0", width: boardSize * 1.42 + "px", transform: "rotate(45deg)", transformOrigin: "top left" },
+        "2,4,6": { top: "0", left: boardSize + "px", width: boardSize * 1.42 + "px", transform: "rotate(-45deg)", transformOrigin: "top right" },
+      };
+      const key = line.join(",");
+      Object.assign(strike.style, positions[key]);
+    }
+
+    function resetGame() {
+      initBoard();
+      statusEl.textContent = `👉 Your turn (${human})`;
+      gameActive = true;
+      humanTurn = true;
+      restartBtn.style.display = "none"; // hide restart again
+    }
+
+    function toggleMute() {
+      mute = !mute;
+      document.querySelector(".mute").textContent = mute ? "🔇 Sound Off":"🔊 Sound On";
+    }
+  </script>
+</body>
+</html>
