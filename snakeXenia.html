@@ -49,6 +49,21 @@
             aspect-ratio: 1 / 1;
             position: relative;
             border-radius: 8px;
+            overflow: hidden; 
+        }
+
+        .game-screen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(20, 20, 20, 0.1) 50%, transparent 50%);
+            background-size: 100% 4px;
+            pointer-events: none; 
+            z-index: 5;
+            opacity: 0.5;
         }
 
         .game-canvas {
@@ -71,6 +86,18 @@
             height: 120px;
         }
 
+        .d-pad-base::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 40px;
+            left: 40px;
+            background-color: #3a3a6b;
+            border-radius: 50%;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+        }
+
         .d-pad-btn {
             position: absolute;
             width: 40px;
@@ -84,12 +111,13 @@
             justify-content: center;
             align-items: center;
             transition: background-color 0.1s ease, transform 0.1s ease;
-            -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
+            z-index: 2;
         }
 
         .d-pad-btn:active {
             background-color: #7070ab;
-            transform: scale(0.95); /* Smooth press animation */
+            transform: scale(0.95);
         }
         
         #upBtn { top: 0; left: 40px; border-radius: 8px 8px 0 0; }
@@ -123,9 +151,17 @@
             height: 24px;
         }
 
-        .difficulty-menu, .pause-overlay {
+        .overlay {
             background-color: rgba(0,0,0,0.7);
             z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+        }
+
+        .overlay.visible {
+            opacity: 1;
+            visibility: visible;
         }
 
         .difficulty-btn {
@@ -135,6 +171,7 @@
             border: 2px solid #1e1e1e;
             box-shadow: 0 4px 0 #111;
             transition: all 0.1s ease;
+            cursor: pointer;
         }
 
         .difficulty-btn:active {
@@ -142,34 +179,47 @@
             box-shadow: 0 2px 0 #111;
         }
 
+        #gameOverText {
+            background: linear-gradient(180deg, #ff4757, #c0392b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px #1e1e1e;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         /* --- MOBILE OPTIMIZATIONS --- */
        @media screen and (max-width: 768px) {
-    body {
-        /* iOS Safari fix to use full viewport height */
-        min-height: -webkit-fill-available;
-        margin: 0; /* reset */
-        padding: env(safe-area-inset-top) env(safe-area-inset-right)
-                 env(safe-area-inset-bottom) env(safe-area-inset-left);
-        box-sizing: border-box;
-        background: #000; /* optional, so padding area blends */
-    }
+        body {
+            padding: 0.5rem;
+            box-sizing: border-box;
+            background: #000;
+            min-height: -webkit-fill-available;
+            padding: env(safe-area-inset-top, 0.5rem) env(safe-area-inset-right, 0.5rem)
+                     env(safe-area-inset-bottom, 0.5rem) env(safe-area-inset-left, 0.5rem);
+        }
 
-    .game-console {
-        width: 100%;
-        height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-        max-width: none;
-        border-radius: 12px; /* rounded corners instead of flush */
-        padding: 1rem 1rem 0.5rem 1rem;
-        justify-content: space-between;
-        gap: 0.5rem;
-        box-sizing: border-box;
-    }
+        .game-console {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            border-radius: 12px;
+            padding: 1rem 1rem 0.5rem 1rem;
+            justify-content: space-between;
+            gap: 0.5rem;
+            box-sizing: border-box;
+        }
 
-    .game-screen {
-        max-height: calc(100vh - 360px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-    }
+        .game-screen {
+            max-height: calc(100vh - 360px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        }
             
-            /* --- NEW: Center controls vertically --- */
             .controls-panel {
                 margin-top: 0;
                 flex-direction: column;
@@ -177,10 +227,16 @@
                 gap: 1rem;
             }
 
-            /* --- NEW: Even bigger D-Pad --- */
             .d-pad-base {
                 width: 210px;
                 height: 210px;
+            }
+
+            .d-pad-base::before {
+                width: 70px;
+                height: 70px;
+                top: 70px;
+                left: 70px;
             }
 
             .d-pad-btn {
@@ -189,13 +245,11 @@
                 font-size: 2.5rem;
             }
             
-            /* --- NEW: Reposition D-pad buttons for the new size --- */
             #upBtn { top: 0; left: 70px; }
             #downBtn { bottom: 0; left: 70px; }
             #leftBtn { left: 0; top: 70px; }
             #rightBtn { right: 0; top: 70px; }
 
-            /* Bigger Action Buttons */
             .action-button {
                 width: 70px;
                 height: 70px;
@@ -222,18 +276,23 @@
 
         <div class="game-screen">
             <canvas id="gameCanvas" class="game-canvas w-full h-full"></canvas>
-            <div id="difficultyMenu" class="absolute inset-0 flex flex-col justify-center items-center space-y-4 difficulty-menu">
+            
+            <div id="difficultyMenu" class="absolute inset-0 flex flex-col justify-center items-center space-y-4 overlay visible">
                 <h2 class="text-2xl mb-4 text-center">SELECT DIFFICULTY</h2>
                 <button class="difficulty-btn" data-difficulty="easy">EASY</button>
                 <button class="difficulty-btn" data-difficulty="medium">MEDIUM</button>
                 <button class="difficulty-btn" data-difficulty="hard">HARD</button>
             </div>
-            <div id="pauseOverlay" class="absolute inset-0 hidden flex-col justify-center items-center pause-overlay">
+
+            <div id="pauseOverlay" class="absolute inset-0 flex flex-col justify-center items-center overlay">
                  <h2 class="text-4xl text-yellow-300" style="text-shadow: 2px 2px #1e1e1e;">PAUSED</h2>
             </div>
-            <div id="gameOver" class="text-center text-4xl text-red-700 font-bold hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="text-shadow: 2px 2px #1e1e1e;">
-                GAME OVER
+            
+            <div id="gameOverOverlay" class="hidden absolute inset-0 flex-col justify-center items-center z-10">
+                <div id="gameOverText" class="text-center text-4xl font-bold">GAME OVER</div>
+                <button id="tryAgainBtn" class="difficulty-btn mt-8">TRY AGAIN</button>
             </div>
+
         </div>
         
         <div class="controls-panel">
@@ -251,14 +310,11 @@
     </div>
 
     <script>
-        // --- JAVASCRIPT IS UNCHANGED ---
-
         // DOM Elements
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreEl = document.getElementById('score');
         const highScoreEl = document.getElementById('highScore');
-        const gameOverEl = document.getElementById('gameOver');
         const newGameBtn = document.getElementById('newGameBtn');
         const audioBtn = document.getElementById('audioBtn');
         const speakerIcon = document.getElementById('speakerIcon');
@@ -267,6 +323,10 @@
         const pauseOverlay = document.getElementById('pauseOverlay');
         const pauseBtn = document.getElementById('pauseBtn');
         const bgMusic = document.getElementById('bgMusic');
+        // --- NEW: DOM elements for Game Over screen ---
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const tryAgainBtn = document.getElementById('tryAgainBtn');
+
 
         // Game constants
         const gridSize = 20;
@@ -280,7 +340,6 @@
         let isGameOver = false, isPaused = false, changingDirection = false, isPowerUpActive = false, isMuted = false;
         let foodEatenCount = 0, gameSpeedDelay;
         
-        // Animation Loop State
         let animationFrameId, lastUpdateTime = 0;
 
         // --- AUDIO SETUP using Tone.js ---
@@ -294,7 +353,6 @@
 
         function setup() {
             const rect = canvas.getBoundingClientRect();
-            // Important: Set canvas render size to its display size for sharp pixels
             canvas.width = rect.width;
             canvas.height = rect.height;
             canvasSize = canvas.width;
@@ -306,24 +364,26 @@
         function showDifficultyMenu() {
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             isPaused = false;
-            pauseOverlay.classList.add('hidden');
+            pauseOverlay.classList.remove('visible');
             pauseBtn.textContent = 'PAUSE';
-            gameOverEl.classList.add('hidden');
-            difficultyMenu.classList.remove('hidden');
+            // --- NEW: Hide game over overlay when returning to menu ---
+            gameOverOverlay.classList.add('hidden');
+            difficultyMenu.classList.add('visible');
         }
 
         function selectDifficulty(level) {
             gameSpeedDelay = difficultySettings[level];
-            difficultyMenu.classList.add('hidden');
+            difficultyMenu.classList.remove('visible');
             startGame();
         }
 
         function startGame() {
             isGameOver = false;
             isPaused = false;
-            pauseOverlay.classList.add('hidden');
+            pauseOverlay.classList.remove('visible');
             pauseBtn.textContent = 'PAUSE';
-            gameOverEl.classList.add('hidden');
+            // --- NEW: Hide game over overlay on start ---
+            gameOverOverlay.classList.add('hidden');
             snake = [{ x: Math.floor(tileCount / 2), y: Math.floor(tileCount / 2) }];
             dx = 1; dy = 0;
             score = 0; scoreEl.textContent = score;
@@ -341,12 +401,13 @@
 
             if (isGameOver) {
                 cancelAnimationFrame(animationFrameId);
-                gameOverEl.classList.remove('hidden');
+                // --- MODIFIED: Show the entire game over overlay ---
+                gameOverOverlay.classList.remove('hidden');
                 playSound("C3", "0.5s");
                 return;
             }
             
-            if (isPaused) return; // Skip updates if paused
+            if (isPaused) return;
 
             const timeSinceLastUpdate = currentTime - lastUpdateTime;
             if (timeSinceLastUpdate < gameSpeedDelay) return;
@@ -411,14 +472,20 @@
             if (head.y >= tileCount) head.y = 0;
             snake.unshift(head);
 
+            // --- MODIFIED: Power-up logic changed as per request ---
             if (isPowerUpActive && head.x === powerUp.x && head.y === powerUp.y) {
-                score *= 2; scoreEl.textContent = score;
-                isPowerUpActive = false; foodEatenCount = 0;
+                score += 50; // Increase score by 50 instead of doubling
+                scoreEl.textContent = score;
+                isPowerUpActive = false; 
+                foodEatenCount = 0;
                 playSound("G5", "0.2s");
-                snake.push({ ...snake[snake.length - 1] });
+                
+                // Add 3 segments to the snake's tail
+                for (let i = 0; i < 3; i++) {
+                    snake.push({ ...snake[snake.length - 1] });
+                }
             }
-
-            if (head.x === food.x && head.y === food.y) {
+            else if (head.x === food.x && head.y === food.y) {
                 score += 10; scoreEl.textContent = score;
                 foodEatenCount++; playSound("C5", "0.1s");
                 if (score > highScore) {
@@ -471,7 +538,6 @@
         }
 
         function handleKeyPress(event) {
-            // This single handler works for both keyboard and touch events
             if (event.key && (event.key.toLowerCase() === 'p' || event.key === 'Escape')) {
                 togglePause();
                 return;
@@ -490,12 +556,12 @@
         }
 
         function togglePause() {
-            if (isGameOver || difficultyMenu.offsetParent !== null) return;
+            if (isGameOver || difficultyMenu.classList.contains('visible')) return;
             isPaused = !isPaused;
-            pauseOverlay.classList.toggle('hidden', !isPaused);
+            pauseOverlay.classList.toggle('visible', isPaused);
             pauseBtn.textContent = isPaused ? 'RESUME' : 'PAUSE';
             if (!isPaused) {
-                lastUpdateTime = performance.now(); // Prevents jump after unpausing
+                lastUpdateTime = performance.now();
             }
         }
 
@@ -507,11 +573,9 @@
         }
         
         async function initAudio() {
-            // Tone.js requires a user interaction to start the audio context
             await Tone.start();
             console.log('Audio context started');
             try {
-                // Autoplay background music
                 await bgMusic.play();
             } catch (err) {
                 console.error("Background music could not be played automatically:", err);
@@ -531,11 +595,15 @@
         newGameBtn.addEventListener('click', showDifficultyMenu);
         pauseBtn.addEventListener('click', togglePause);
         audioBtn.addEventListener('click', toggleAudio);
+        // --- NEW: Event listener for the Try Again button ---
+        tryAgainBtn.addEventListener('click', showDifficultyMenu);
 
-        // Use touchstart for faster response on mobile for action buttons
         newGameBtn.addEventListener('touchstart', (e) => { e.preventDefault(); showDifficultyMenu(); }, { passive: false });
         pauseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); }, { passive: false });
         audioBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleAudio(); }, { passive: false });
+        // --- NEW: Touch listener for the Try Again button ---
+        tryAgainBtn.addEventListener('touchstart', (e) => { e.preventDefault(); showDifficultyMenu(); }, { passive: false });
+
         
         difficultyMenu.addEventListener('click', (e) => {
             if (e.target.dataset.difficulty) selectDifficulty(e.target.dataset.difficulty);
