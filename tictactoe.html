@@ -324,22 +324,37 @@ button.mute {
       else { let best=+Infinity; for(let i=0;i<9;i++){ if(board[i]===""){ board[i]=human; let s=minimax(board,d+1,true,a,b); board[i]=""; best=Math.min(best,s); b=Math.min(b,best); if(b<=a) break; } } return best; }
     }
     function checkWin(player,board=cells){ return WINS.some(line=>line.every(i=>board[i]===player)); }
+function endIfNeeded(player){
+  for(const line of WINS){
+    if(line.every(i=>cells[i]===player)){
+      line.forEach(i=>boardEl.querySelector(`[data-index='${i}']`).classList.add('win'));
+      
+      // ❌ Removed strike line creation
+      // const strike=document.createElement('div'); 
+      // strike.className='strike'; 
+      // boardEl.appendChild(strike);
+      // positionStrike(strike,line);
 
-    function endIfNeeded(player){
-      for(const line of WINS){
-        if(line.every(i=>cells[i]===player)){
-          line.forEach(i=>boardEl.querySelector(`[data-index='${i}']`).classList.add('win'));
-          const strike=document.createElement('div'); strike.className='strike'; boardEl.appendChild(strike);
-          positionStrike(strike,line);
-          statusEl.textContent = player===human? '🎉🏆 You Win! ✨':'💀🤖 Computer Wins!';
-          gameActive=false; playSound('winSound'); restartBtn.classList.remove('hidden');
-          return true;
-        }
-      }
-      if(cells.every(c=>c!=="")){ statusEl.textContent="😐 It's a Draw! 🤝"; gameActive=false; playSound('drawSound'); restartBtn.classList.remove('hidden'); return true; }
-      return false;
+      statusEl.textContent = player===human 
+        ? '🎉🏆 You Win! ✨' 
+        : '💀🤖 Computer Wins!';
+      
+      gameActive=false; 
+      playSound('winSound'); 
+      restartBtn.classList.remove('hidden');
+      return true;
     }
-
+  }
+  if(cells.every(c=>c!=="")){
+    statusEl.textContent="😐 It's a Draw! 🤝";
+    gameActive=false; 
+    playSound('drawSound'); 
+    restartBtn.classList.remove('hidden'); 
+    return true; 
+  }
+  return false;
+}
+    
     restartBtn.addEventListener('click', ()=>{ initBoard(); statusEl.textContent=`👉 Your turn (${human})`; gameActive=true; humanTurn=true; restartBtn.classList.add('hidden'); });
     function playSound(id){ if(mute) return; const s=document.getElementById(id); s.currentTime=0; s.play(); }
 
@@ -347,4 +362,5 @@ button.mute {
   </script>
 </body>
 </html>
+
 
