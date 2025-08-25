@@ -29,6 +29,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
 
     <script type="application/ld+json">
     {
@@ -113,7 +115,6 @@
         details > summary { list-style: none; cursor: pointer; } 
         details > summary::-webkit-details-marker { display: none; }
 
-        /* --- NEW CSS FOR DOWNLOAD SECTION --- */
         .instruction-step {
             display: flex;
             align-items: flex-start;
@@ -126,10 +127,63 @@
             color: #a78bfa; /* violet-400 */
             margin-right: 1rem;
         }
-        /* --- END OF NEW CSS --- */
+    </style>
+    <style>
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .loader img {
+            width: 150px;
+            animation-fill-mode: forwards; /* Keep the final state of the animation */
+        }
+
+        @keyframes spinZoom {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+        }
+
+        .loader h1 {
+            margin-top: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            opacity: 0;
+            background: linear-gradient(90deg, #ff0000, #ff7300, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 50, 0, 0.6),
+                         0 0 20px rgba(255, 120, 0, 0.6),
+                         0 0 40px rgba(255, 200, 0, 0.6);
+            animation: fadeInTextGlow 1s ease forwards 1s;
+        }
+
+        @keyframes fadeInTextGlow {
+            0% { opacity: 0; transform: translateY(20px); text-shadow: none; }
+            50% { opacity: 0.7; transform: translateY(10px); text-shadow: 0 0 20px rgba(255, 120, 0, 0.8); }
+            100% { opacity: 1; transform: translateY(0); text-shadow: 0 0 30px rgba(255, 200, 0, 1), 0 0 60px rgba(255, 100, 0, 0.9); }
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
+
+    <div class="loader" id="loader">
+      <img id="logo" src="images/NOVABLADE.png" alt="NOVA BLADE Logo">
+      <h1>NOVA BLADE</h1>
+    </div>
 
     <div class="relative flex flex-col items-center p-6 sm:p-8">
         
@@ -172,34 +226,34 @@
             <h2 class="orbitron text-4xl font-bold text-center mb-12 neon-glow text-violet-300">Featured Games</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
                  <a href="snakeXenia.html" class="cursor-pointer group game-card-container">
-                     <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #00BFFF; --glow-color-2: #00ff88;">
-                         <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                             <svg viewBox="0 0 100 100" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00BFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" /></linearGradient></defs><path d="M85 15H25C19.4772 15 15 19.4772 15 25V85" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M85 85H45C39.4772 85 35 80.5228 35 75V35C35 29.4772 39.4772 25 45 25H75" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="20" r="5" fill="#00ff88"></circle></svg>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">Snake Xenia</h3>
-                         <p class="text-gray-400 text-sm mt-2 mb-4">A modern twist on the retro serpent adventure.</p>
-                         <p class="text-gray-300 text-base flex-grow">Relive the classic arcade thrill with Snake Xenia. Navigate the growing serpent to consume pellets and achieve the high score, but be careful not to run into walls or your own tail.</p>
-                     </div>
+                      <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #00BFFF; --glow-color-2: #00ff88;">
+                           <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                                <svg viewBox="0 0 100 100" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00BFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" /></linearGradient></defs><path d="M85 15H25C19.4772 15 15 19.4772 15 25V85" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M85 85H45C39.4772 85 35 80.5228 35 75V35C35 29.4772 39.4772 25 45 25H75" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="20" r="5" fill="#00ff88"></circle></svg>
+                           </div>
+                           <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">Snake Xenia</h3>
+                           <p class="text-gray-400 text-sm mt-2 mb-4">A modern twist on the retro serpent adventure.</p>
+                           <p class="text-gray-300 text-base flex-grow">Relive the classic arcade thrill with Snake Xenia. Navigate the growing serpent to consume pellets and achieve the high score, but be careful not to run into walls or your own tail.</p>
+                      </div>
                  </a>
                  <a href="pac-man.html" class="cursor-pointer group game-card-container">
-                     <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #FFD700; --glow-color-2: #FF6347;">
-                         <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                             <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="pacGradient"><stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" /></radialGradient></defs><path d="M50 50 L 95 30 A 45 45 0 1 1 95 70 L 50 50" fill="url(#pacGradient)"></path><circle cx="28" cy="40" r="3" fill="#FF6347"></circle><circle cx="23" cy="55" r="3" fill="#FF6347"></circle></svg>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">PAC-MAN</h3>
-                         <p class="text-gray-400 text-sm mt-2 mb-4">The original icon of retro maze munching.</p>
-                         <p class="text-gray-300 text-base flex-grow">Waka waka your way through the iconic maze in our faithful browser rendition of Pac-Man. Devour all the dots while evading the pesky ghosts Blinky, Pinky, Inky, and Clyde.</p>
-                     </div>
+                      <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #FFD700; --glow-color-2: #FF6347;">
+                           <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                                <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="pacGradient"><stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" /></radialGradient></defs><path d="M50 50 L 95 30 A 45 45 0 1 1 95 70 L 50 50" fill="url(#pacGradient)"></path><circle cx="28" cy="40" r="3" fill="#FF6347"></circle><circle cx="23" cy="55" r="3" fill="#FF6347"></circle></svg>
+                           </div>
+                           <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">PAC-MAN</h3>
+                           <p class="text-gray-400 text-sm mt-2 mb-4">The original icon of retro maze munching.</p>
+                           <p class="text-gray-300 text-base flex-grow">Waka waka your way through the iconic maze in our faithful browser rendition of Pac-Man. Devour all the dots while evading the pesky ghosts Blinky, Pinky, Inky, and Clyde.</p>
+                      </div>
                  </a>
                  <a href="tictactoe.html" class="cursor-pointer group game-card-container">
-                     <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #8A2BE2; --glow-color-2: #FF1493;">
-                         <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                             <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><g stroke-width="10" stroke-linecap="round" stroke="white"><line x1="15" y1="15" x2="85" y2="85" /><line x1="85" y1="15" x2="15" y2="85" /><circle cx="50" cy="50" r="30" fill="none" /></g></svg>
-                         </div>
-                         <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">TIC TAC TOE</h3>
-                         <p class="text-gray-400 text-sm mt-2 mb-4">A timeless battle of wits and strategy.</p>
-                         <p class="text-gray-300 text-base flex-grow">Challenge a friend or our smart AI in this sleek, modern version of Tic-Tac-Toe. It's a game of pure strategy that's easy to learn but offers surprising depth.</p>
-                     </div>
+                      <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #8A2BE2; --glow-color-2: #FF1493;">
+                           <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                                <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><g stroke-width="10" stroke-linecap="round" stroke="white"><line x1="15" y1="15" x2="85" y2="85" /><line x1="85" y1="15" x2="15" y2="85" /><circle cx="50" cy="50" r="30" fill="none" /></g></svg>
+                           </div>
+                           <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">TIC TAC TOE</h3>
+                           <p class="text-gray-400 text-sm mt-2 mb-4">A timeless battle of wits and strategy.</p>
+                           <p class="text-gray-300 text-base flex-grow">Challenge a friend or our smart AI in this sleek, modern version of Tic-Tac-Toe. It's a game of pure strategy that's easy to learn but offers surprising depth.</p>
+                      </div>
                  </a>
             </div>
             <div class="text-center mt-16">
@@ -212,7 +266,8 @@
             <p class="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
                 For the smoothest, full-screen gameplay experience, download the official Nova Blade app for Android.
             </p>
-            <a href="https://github.com/SharonZane01/nova-blade-apk/releases/download/v1.0/Nova.Blade.apk" class="cta-button text-lg orbitron mb-12" style="background: linear-gradient(45deg, #10B981, #34D399);">
+            <a href="https://github.com/SharonZane01/nova-blade-apk/releases/download/v1.0/Nova.Blade.apk" 
+            class="cta-button text-lg orbitron mb-12" style="background: linear-gradient(45deg, #10B981, #34D399);">
                 Download for Android (.apk)
             </a>
 
@@ -222,7 +277,7 @@
                     <div class="instruction-number">1</div>
                     <div>
                         <h4 class="font-bold text-lg text-gray-100">Download the File</h4>
-                        <p class="text-gray-400">Click the button above to download the `app-debug.apk` file directly to your phone.</p>
+                        <p class="text-gray-400">Click the button above to download the `Nova.Blade.apk` file directly to your phone.</p>
                     </div>
                 </div>
                 <div class="instruction-step">
@@ -287,7 +342,7 @@
                  <div class="orbitron text-lg font-bold">NOVA BLADE</div>
                  <nav class="flex gap-4 md:gap-6">
                      <a href="/" class="hover:text-white transition">Home</a>
-                     <a href="/all-games.html" class="hover:text-white transition">All Games</a>
+                     <a href="#" class="hover:text-white transition">All Games</a>
                      <a href="#features" class="hover:text-white transition">Features</a>
                      <a href="#community" class="hover:text-white transition">Community</a>
                  </nav>
@@ -298,5 +353,48 @@
         </footer>
     </div>
     
-    </body>
+    <script>
+      // Immediately disable scrolling
+      document.body.style.overflow = 'hidden';
+
+      const logo = document.getElementById("logo");
+      const loaderElement = document.getElementById('loader');
+      
+      // Default duration
+      let duration = 3000;
+
+      // Try to detect network speed for a better UX
+      try {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (connection) {
+          if (connection.effectiveType === "4g" && connection.downlink > 5) {
+            duration = 2000; // Fast connection
+          } else if (connection.effectiveType === "3g") {
+            duration = 4000; // Medium
+          } else {
+            duration = 5000; // Slow (2g or worse)
+          }
+        }
+      } catch (error) {
+        console.warn("Could not determine network speed, using default loader duration.");
+      }
+      
+      // Apply animation dynamically with the calculated duration
+      logo.style.animation = `spinZoom ${duration/1000}s ease`;
+
+      // Set a timeout to remove the loader
+      setTimeout(() => {
+        loaderElement.style.opacity = '0';
+        
+        // Listen for the fade-out transition to end
+        loaderElement.addEventListener('transitionend', () => {
+          // Hide the loader completely
+          loaderElement.style.display = 'none';
+          // Re-enable scrolling
+          document.body.style.overflow = '';
+        }, { once: true }); // Ensure the event listener runs only once
+
+      }, duration);
+    </script>
+</body>
 </html>
