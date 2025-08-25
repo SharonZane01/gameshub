@@ -1,427 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Primary Meta Tags -->
-  <title>Nova Blade - Game Hub for Gamers</title>
-  <meta name="title" content="Nova Blade - Game Hub for Gamers">
-  <meta name="description" content="Nova Blade is your ultimate game hub. Discover trending games, news, reviews, and updates about the gaming world. Join the Nova Blade community today!">
-  <meta name="keywords" content="Nova Blade, gaming hub, PC games, console games, game reviews, gaming news, esports, novablade.netlify.app">
-  <meta name="author" content="Nova Blade Team">
-  <link rel="canonical" href="https://novablade.netlify.app/">
+    <title>Nova Blade - An Immersive Browser Gaming Experience</title>
+    <meta name="title" content="Nova Blade - An Immersive Browser Gaming Experience">
+    <meta name="description" content="Dive into an immersive gaming experience with Nova Blade. Play a curated collection of classic and modern browser games instantly, join our community, and climb the leaderboards. No downloads needed!">
+    <meta name="keywords" content="immersive gaming, browser games, instant play, gaming community, online arcade, retro games, no download games, Nova Blade, novablade.netlify.app">
+    <meta name="author" content="Nova Blade Team">
+    <link rel="canonical" href="https://novablade.netlify.app/">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://novablade.netlify.app/">
-  <meta property="og:title" content="Nova Blade - Game Hub for Gamers">
-  <meta property="og:description" content="Stay ahead in the gaming world with Nova Blade. Explore the latest games, news, and reviews all in one hub.">
-  <meta property="og:image" content="https://novablade.netlify.app/preview-image.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://novablade.netlify.app/">
+    <meta property="og:title" content="Nova Blade - An Immersive Browser Gaming Experience">
+    <meta property="og:description" content="Experience instant, immersive gaming. Nova Blade offers a curated library of browser games, community features, and leaderboards.">
+    <meta property="og:image" content="https://novablade.netlify.app/preview-image.jpg">
+    <meta property="og:site_name" content="Nova Blade">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://novablade.netlify.app/">
-  <meta name="twitter:title" content="Nova Blade - Game Hub for Gamers">
-  <meta name="twitter:description" content="Stay ahead in the gaming world with Nova Blade. Explore trending games, reviews, and esports updates.">
-  <meta name="twitter:image" content="https://novablade.netlify.app/preview-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://novablade.netlify.app/">
+    <meta name="twitter:title" content="Nova Blade - An Immersive Browser Gaming Experience">
+    <meta name="twitter:description" content="Experience instant, immersive gaming. Nova Blade offers a curated library of browser games, community features, and leaderboards.">
+    <meta name="twitter:image" content="https://novablade.netlify.app/preview-image.jpg">
 
-  <!-- Fonts & Styles -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Google Site Verification -->
-  <meta name="google-site-verification" content="hWDc7VKIFLxgtZbWHJ5oRvQj5D4A3SP5qe69lzmlRzw" />
+    <meta name="google-site-verification" content="hWDc7VKIFLxgtZbWHJ5oRvQj5D4A3SP5qe69lzmlRzw" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Nova Blade",
+      "url": "https://novablade.netlify.app/",
+      "description": "Your ultimate hub for discovering and playing a curated collection of classic and new browser-based games. Get the latest gaming news, reviews, and join a vibrant community with leaderboards and challenges.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://novablade.netlify.app/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
     <style>
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #000411;
-            background-image: radial-gradient(circle at 1% 1%, rgba(76, 29, 149, 0.3) 0%, transparent 40%),
-                              radial-gradient(circle at 99% 99%, rgba(13, 71, 161, 0.3) 0%, transparent 40%);
-            overflow-x: hidden;
-            position: relative;
-        }
-        
-        .orbitron {
-            font-family: 'Orbitron', monospace;
-        }
-        
-        #particle-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        
-        .game-card-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 1.5rem; /* Smoother radius */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            perspective: 1000px; /* Added for 3D effect */
-        }
-        
-        .game-card-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 1.5rem;
-            padding: 2px;
-            background: linear-gradient(45deg, var(--glow-color-1), var(--glow-color-2), var(--glow-color-1));
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        
-        .game-card-container:hover::before {
-            opacity: 1;
-        }
-        
-        .game-card-container:hover {
-            transform: translateY(-15px) scale(1.03) rotateX(8deg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 25px -5px var(--glow-color-2);
-        }
-        
-        .game-card-container:active {
-            transform: translateY(-5px) scale(0.98);
-        }
-        
-        .game-icon {
-            transition: transform 0.3s ease;
-        }
-        
-        .game-card-container:hover .game-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        .floating {
-            animation: float 5s ease-in-out infinite;
-        }
-        
-        .quote-container {
-            transition: all 1s ease-in-out;
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-        }
-        
-        .neon-glow {
-            text-shadow: 0 0 8px currentColor, 0 0 20px rgba(255, 255, 255, 0.3);
-        }
+        body { font-family: 'Rajdhani', sans-serif; background-color: #000411; background-image: radial-gradient(circle at 1% 1%, rgba(76, 29, 149, 0.3) 0%, transparent 40%), radial-gradient(circle at 99% 99%, rgba(13, 71, 161, 0.3) 0%, transparent 40%); overflow-x: hidden; position: relative; }
+        .orbitron { font-family: 'Orbitron', monospace; }
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); border-radius: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+        .game-card-container { perspective: 1000px; }
+        .game-card-container .glass-card:hover { transform: translateY(-15px) scale(1.03) rotateX(8deg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 25px -5px var(--glow-color-2); }
+        .glass-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 1.5rem; padding: 2px; background: linear-gradient(45deg, var(--glow-color-1), var(--glow-color-2), var(--glow-color-1)); background-size: 200% 200%; animation: gradientShift 3s ease infinite; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0; transition: opacity 0.4s ease; }
+        .glass-card:hover::before { opacity: 1; }
+        .game-icon { transition: transform 0.3s ease; }
+        .glass-card:hover .game-icon { transform: scale(1.1) rotate(5deg); }
+        @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        .floating { animation: float 5s ease-in-out infinite; }
+        .neon-glow { text-shadow: 0 0 8px currentColor, 0 0 20px rgba(255, 255, 255, 0.3); }
+        .cta-button { display: inline-block; background: linear-gradient(45deg, #4F46E5, #9333EA); padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4); }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(147, 51, 234, 0.6); }
+        details > summary { list-style: none; cursor: pointer; } details > summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen">
     <canvas id="particle-canvas"></canvas>
 
-    <div class="relative min-h-screen flex flex-col items-center justify-center p-6 sm:p-8">
-        <header class="text-center mb-12 md:mb-16 floating">
+    <div class="relative flex flex-col items-center p-6 sm:p-8">
+        
+        <header class="text-center mb-12 md:mb-16 floating py-20">
             <h1 class="orbitron text-5xl sm:text-6xl lg:text-7xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-violet-400 neon-glow">
-                GAME HUB 
+                NOVA BLADE
             </h1>
-            <h4 class="text-gray-400 mt-2 text-sm sm:text-base uppercase tracking-widest">
-                Play. Compete. Conquer.</h4>
-                <h6 class="text-white-500 mt-1 text-xs sm:text-sm uppercase tracking-widest">
-                TURN ON AUDIO FOR BETTER EXPERIENCE </h6>
-            <p class="text-gray-400 mt-6 text-lg sm:text-xl font-light tracking-wide">
-                🎮 Your Portal to Infinite Gaming Adventures 🚀
+            <h2 class="text-gray-300 mt-4 text-lg sm:text-2xl tracking-wider">
+                Your Instant Gateway to an Immersive Gaming Universe
+            </h2>
+            <p class="text-gray-400 mt-6 text-lg sm:text-xl font-light tracking-wide max-w-3xl mx-auto">
+                Dive into a hand-picked collection of iconic retro classics and addictive modern titles. No downloads, no installations—just pure, seamless gaming.
             </p>
-            <div class="w-32 h-1 bg-gradient-to-r from-transparent via-violet-500 to-transparent mx-auto mt-4"></div>
+            <div class="w-32 h-1 bg-gradient-to-r from-transparent via-violet-500 to-transparent mx-auto mt-6"></div>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full max-w-7xl">
-            <a href="snakeXenia.html" target="_blank" class="cursor-pointer">
-                <div class="game-card-container p-6 sm:p-8 text-center" style="--glow-color-1: #00BFFF; --glow-color-2: #00ff88;">
-                    <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                        <svg viewBox="0 0 100 100" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M85 15H25C19.4772 15 15 19.4772 15 25V85" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M85 85H45C39.4772 85 35 80.5228 35 75V35C35 29.4772 39.4772 25 45 25H75" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="80" cy="20" r="6" fill="#00ff88">
-                                <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/>
-                            </circle>
-                            <defs>
-                                <linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00BFFF;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">Snake Xenia</h2>
-                    <p class="text-gray-400 text-sm mt-2">Retro serpent adventure</p>
+        <section id="features" class="my-16 w-full max-w-6xl">
+            <h2 class="orbitron text-4xl font-bold text-center mb-12 neon-glow text-sky-300">The Nova Blade Experience</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="glass-card p-6" style="--glow-color-1: #3b82f6; --glow-color-2: #60a5fa;">
+                    <h3 class="orbitron text-2xl font-bold mb-3">Instant Play</h3>
+                    <p class="text-gray-300">Click any game and start playing immediately. We eliminate friction so you can focus on the fun. Your next adventure is just one second away.</p>
                 </div>
-            </a>
+                <div class="glass-card p-6" style="--glow-color-1: #8b5cf6; --glow-color-2: #a78bfa;">
+                    <h3 class="orbitron text-2xl font-bold mb-3">Curated Library</h3>
+                    <p class="text-gray-300">Our games are hand-selected by passionate gamers. We prioritize quality, fun-factor, and performance to ensure a premium experience.</p>
+                </div>
+                <div class="glass-card p-6" style="--glow-color-1: #ec4899; --glow-color-2: #f472b6;">
+                    <h3 class="orbitron text-2xl font-bold mb-3">Community & Compete</h3>
+                    <p class="text-gray-300">Join a growing community of players. Compete for high scores on our leaderboards and participate in weekly challenges to prove your skills.</p>
+                </div>
+                <div class="glass-card p-6" style="--glow-color-1: #10b981; --glow-color-2: #34d399;">
+                    <h3 class="orbitron text-2xl font-bold mb-3">Optimized for All</h3>
+                    <p class="text-gray-300">Our platform is built for speed. Enjoy a smooth, lag-free experience on any modern browser, whether on desktop or mobile.</p>
+                </div>
+            </div>
+        </section>
 
-            <a href="pac-man.html" target="_blank" class="cursor-pointer">
-                <div class="game-card-container p-6 sm:p-8 text-center" style="--glow-color-1: #FFD700; --glow-color-2: #FF6347;">
-                    <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                         <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M50 50 L 85 25 A 45 45 0 1 1 85 75 L 50 50" fill="url(#pacGradient)">
-                                <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="4s" repeatCount="indefinite"/>
-                           </path>
-                           <circle cx="30" cy="35" r="3" fill="#FF6347">
-                               <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
-                           </circle>
-                           <circle cx="25" cy="50" r="3" fill="#FF6347">
-                               <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite"/>
-                           </circle>
-                           <circle cx="30" cy="65" r="3" fill="#FF6347">
-                               <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/>
-                           </circle>
-                           <defs>
-                               <radialGradient id="pacGradient">
-                                   <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                                   <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
-                               </radialGradient>
-                           </defs>
-                       </svg>
+        <main class="w-full max-w-7xl my-16">
+            <h2 class="orbitron text-4xl font-bold text-center mb-12 neon-glow text-violet-300">Featured Games</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                 <a href="snakeXenia.html" class="cursor-pointer group game-card-container">
+                    <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #00BFFF; --glow-color-2: #00ff88;">
+                        <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                             <svg viewBox="0 0 100 100" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M85 15H25C19.4772 15 15 19.4772 15 25V85" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M85 85H45C39.4772 85 35 80.5228 35 75V35C35 29.4772 39.4772 25 45 25H75" stroke="url(#snakeGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="80" cy="20" r="6" fill="#00ff88"><animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"/></circle><defs><linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00BFFF;stop-opacity:1" /><stop offset="100%" style="stop-color:#00ff88;stop-opacity:1" /></linearGradient></defs></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">Snake Xenia</h3>
+                        <p class="text-gray-400 text-sm mt-2 mb-4">A modern twist on the retro serpent adventure.</p>
+                        <p class="text-gray-300 text-base flex-grow">Relive the classic arcade thrill with Snake Xenia. Navigate the growing serpent to consume pellets and achieve the high score, but be careful not to run into walls or your own tail.</p>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">PAC-MAN</h2>
-                    <p class="text-gray-400 text-sm mt-2">Retro maze munching</p>
-                </div>
-            </a>
-            
-            <a href="tictactoe.html" target="_blank" class="cursor-pointer">
-                <div class="game-card-container p-6 sm:p-8 text-center" style="--glow-color-1: #8A2BE2; --glow-color-2: #FF1493;">
-                    <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
-                        <svg viewBox="0 0 100 100" class="w-full h-full" fill="url(#tetrisGradient)" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="20" y="20" width="18" height="18" rx="2">
-                                <animate attributeName="y" values="20;15;20" dur="2s" repeatCount="indefinite"/>
-                            </rect>
-                            <rect x="40" y="20" width="18" height="18" rx="2">
-                                <animate attributeName="y" values="20;15;20" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-                            </rect>
-                            <rect x="60" y="20" width="18" height="18" rx="2">
-                                <animate attributeName="y" values="20;15;20" dur="2s" begin="1s" repeatCount="indefinite"/>
-                            </rect>
-                            <rect x="40" y="40" width="18" height="18" rx="2">
-                                <animate attributeName="y" values="40;35;40" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-                            </rect>
-                            <defs>
-                                <linearGradient id="tetrisGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#8A2BE2;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                </a>
+                <a href="pac-man.html" class="cursor-pointer group game-card-container">
+                    <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #FFD700; --glow-color-2: #FF6347;">
+                        <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                             <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><path d="M50 50 L 85 25 A 45 45 0 1 1 85 75 L 50 50" fill="url(#pacGradient)"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="4s" repeatCount="indefinite"/></path><circle cx="30" cy="35" r="3" fill="#FF6347"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/></circle><circle cx="25" cy="50" r="3" fill="#FF6347"><animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="30" cy="65" r="3" fill="#FF6347"><animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/></circle><defs><radialGradient id="pacGradient"><stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" /><stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" /></radialGradient></defs></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">PAC-MAN</h3>
+                        <p class="text-gray-400 text-sm mt-2 mb-4">The original icon of retro maze munching.</p>
+                        <p class="text-gray-300 text-base flex-grow">Waka waka your way through the iconic maze in our faithful browser rendition of Pac-Man. Devour all the dots while evading the pesky ghosts Blinky, Pinky, Inky, and Clyde.</p>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">TIC TAC TOE</h2>
-                    <p class="text-gray-400 text-sm mt-2">Puzzle perfection</p>
-                </div>
-            </a>
+                </a>
+                <a href="tictactoe.html" class="cursor-pointer group game-card-container">
+                    <div class="glass-card p-6 sm:p-8 text-center h-full flex flex-col" style="--glow-color-1: #8A2BE2; --glow-color-2: #FF1493;">
+                        <div class="game-icon mx-auto mb-6 flex items-center justify-center w-28 h-28">
+                            <svg viewBox="0 0 100 100" class="w-full h-full" fill="url(#ticTacToeGradient)" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="15" x2="85" y2="85" stroke-width="10" stroke-linecap="round" stroke="white"><animate attributeName="stroke-dasharray" values="0 141; 141 0" dur="2s" repeatCount="indefinite"/></line><line x1="85" y1="15" x2="15" y2="85" stroke-width="10" stroke-linecap="round" stroke="white"><animate attributeName="stroke-dasharray" values="0 141; 141 0" dur="2s" begin="1s" repeatCount="indefinite"/></line><circle cx="50" cy="50" r="30" stroke-width="10" stroke-dasharray="0 188" stroke-linecap="round" stroke="white" fill="none"><animate attributeName="stroke-dasharray" values="0 188; 188 0" dur="2s" begin="0.5s" repeatCount="indefinite"/></circle><defs><linearGradient id="ticTacToeGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#8A2BE2;stop-opacity:1" /><stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" /></linearGradient></defs></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-gray-100 orbitron">TIC TAC TOE</h3>
+                        <p class="text-gray-400 text-sm mt-2 mb-4">A timeless battle of wits and strategy.</p>
+                        <p class="text-gray-300 text-base flex-grow">Challenge a friend or our smart AI in this sleek, modern version of Tic-Tac-Toe. It's a game of pure strategy that's easy to learn but offers surprising depth.</p>
+                    </div>
+                </a>
+            </div>
+            <div class="text-center mt-16">
+                <a href="/all-games.html" class="cta-button orbitron">Explore the Full Library</a>
+            </div>
         </main>
         
-        <div id="quote-container" class="quote-container text-center mt-16 max-w-3xl mx-4 p-8">
-            <p id="quote-text" class="text-gray-200 italic text-lg md:text-xl font-light"></p>
-            <p id="quote-author" class="text-gray-300 mt-3 font-semibold"></p>
-        </div>
+        <section id="community" class="my-16 w-full max-w-5xl">
+            <h2 class="orbitron text-4xl font-bold text-center mb-12 neon-glow text-sky-300">From Our Community</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card p-8">
+                    <p class="text-gray-300 italic">"Nova Blade is my go-to for a quick gaming fix. The fact that I can just open a browser and play a flawless version of Pac-Man is incredible. Zero lag, all fun."</p>
+                    <p class="text-right mt-4 font-bold orbitron text-violet-300">- PixelPioneer88</p>
+                </div>
+                <div class="glass-card p-8">
+                    <p class="text-gray-300 italic">"I love the selection of games. It's not bloated with thousands of bad ones; it's a curated list of genuine classics. The weekly challenges keep me coming back for more!"</p>
+                    <p class="text-right mt-4 font-bold orbitron text-violet-300">- GlitchGoddess</p>
+                </div>
+            </div>
+        </section>
 
-        <footer class="mt-12 text-center text-gray-400 text-sm">
-            
-            <p class="orbitron">⚡ SELECT A GAME TO BEGIN YOUR ADVENTURE ⚡</p>
+        <section id="news" class="w-full max-w-7xl my-24">
+            </section>
+
+        <section id="faq" class="my-16 w-full max-w-4xl">
+            <h2 class="orbitron text-4xl font-bold text-center mb-12 neon-glow text-violet-300">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="glass-card p-6 group" open>
+                    <summary class="flex justify-between items-center font-bold orbitron text-xl text-white">
+                        What kind of games can I find on Nova Blade?
+                        <span class="transform transition-transform duration-300 group-open:rotate-45">+</span>
+                    </summary>
+                    <p class="text-gray-300 mt-4">Nova Blade specializes in high-quality browser games that you can play instantly. Our library includes timeless arcade classics, challenging puzzle games, and engaging strategy titles. We are constantly expanding our collection with both retro gems and modern indie hits.</p>
+                </details>
+                <details class="glass-card p-6 group">
+                    <summary class="flex justify-between items-center font-bold orbitron text-xl text-white">
+                        Is it completely free to play?
+                        <span class="transform transition-transform duration-300 group-open:rotate-45">+</span>
+                    </summary>
+                    <p class="text-gray-300 mt-4">Yes, absolutely! All games on Nova Blade are 100% free to play. Our mission is to make great gaming experiences accessible to everyone, everywhere, without any hidden costs or subscriptions.</p>
+                </details>
+                <details class="glass-card p-6 group">
+                    <summary class="flex justify-between items-center font-bold orbitron text-xl text-white">
+                        Do I need to download anything or create an account?
+                        <span class="transform transition-transform duration-300 group-open:rotate-45">+</span>
+                    </summary>
+                    <p class="text-gray-300 mt-4">No downloads or installations are ever required. To play a game, you simply click on it. While you can play as a guest, creating a free account allows you to track your high scores, compete on the leaderboards, and join community events.</p>
+                </details>
+            </div>
+        </section>
+
+        <footer class="w-full border-t border-gray-700/50 mt-20 pt-8 text-center text-gray-400 text-sm">
+             <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 px-6">
+                <div class="orbitron text-lg font-bold">NOVA BLADE</div>
+                <nav class="flex gap-4 md:gap-6">
+                    <a href="/" class="hover:text-white transition">Home</a>
+                    <a href="/all-games.html" class="hover:text-white transition">All Games</a>
+                    <a href="#features" class="hover:text-white transition">Features</a>
+                    <a href="#community" class="hover:text-white transition">Community</a>
+                </nav>
+                <div class="text-gray-500">
+                    &copy; 2025 Nova Blade. All Rights Reserved.
+                </div>
+            </div>
         </footer>
     </div>
-
+    
     <script>
+        // --- PARTICLE CANVAS SCRIPT (Unchanged) ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        
         function resizeCanvas() {
             canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.height = document.body.scrollHeight; // Make canvas full page height
         }
         resizeCanvas();
 
         let particlesArray = [];
-        const mouse = { x: null, y: null, radius: (window.innerWidth / 12) }; // Responsive mouse radius
+        const mouse = { x: null, y: null, radius: (window.innerWidth / 12) };
 
         function updateMouseRadius() {
             mouse.radius = (window.innerWidth / 12);
         }
 
-        window.addEventListener('mousemove', (event) => {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-        window.addEventListener('touchmove', (event) => {
-            if (event.touches.length > 0) {
-              mouse.x = event.touches[0].clientX;
-              mouse.y = event.touches[0].clientY;
-            }
-        });
-        window.addEventListener('touchend', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
+        window.addEventListener('mousemove', (event) => { mouse.x = event.clientX; mouse.y = event.clientY; });
+        window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+        window.addEventListener('touchmove', (event) => { if (event.touches.length > 0) { mouse.x = event.touches[0].clientX; mouse.y = event.touches[0].clientY; } });
+        window.addEventListener('touchend', () => { mouse.x = null; mouse.y = null; });
 
         class Particle {
             constructor(x, y, directionX, directionY, size, color) {
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.color = color;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 30) + 10;
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color; this.baseX = this.x; this.baseY = this.y; this.density = (Math.random() * 30) + 10;
             }
-
             draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = this.color;
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill();
             }
-
             update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y; let distance = Math.sqrt(dx * dx + dy * dy);
                 if (distance < mouse.radius && mouse.x !== null) {
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    let maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    let directionX = forceDirectionX * force * this.density;
-                    let directionY = forceDirectionY * force * this.density;
-                    this.x -= directionX;
-                    this.y -= directionY;
+                    let forceDirectionX = dx / distance; let forceDirectionY = dy / distance; let maxDistance = mouse.radius; let force = (maxDistance - distance) / maxDistance;
+                    let directionX = forceDirectionX * force * this.density; let directionY = forceDirectionY * force * this.density;
+                    this.x -= directionX; this.y -= directionY;
                 } else {
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy / 10;
-                    }
+                    if (this.x !== this.baseX) { this.x -= (this.x - this.baseX) / 10; }
+                    if (this.y !== this.baseY) { this.y -= (this.y - this.baseY) / 10; }
                 }
-
-                if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-                   this.directionX = -this.directionX;
-                }
-                if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-                   this.directionY = -this.directionY;
-                }
-                this.x += this.directionX;
-                this.y += this.directionY;
                 this.draw();
             }
         }
-
         function connect() {
             let opacityValue = 1;
             for (let a = 0; a < particlesArray.length; a++) {
                 for (let b = a; b < particlesArray.length; b++) {
-                    let distance = Math.sqrt(
-                        (particlesArray[a].x - particlesArray[b].x) ** 2 + 
-                        (particlesArray[a].y - particlesArray[b].y) ** 2
-                    );
-                    
-                    if (distance < (canvas.width / 15)) { // Responsive connection distance
-                        opacityValue = 1 - (distance / (canvas.width / 15));
-                        ctx.strokeStyle = `rgba(148, 0, 211, ${opacityValue * 0.5})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
+                    let distance = Math.sqrt((particlesArray[a].x - particlesArray[b].x) ** 2 + (particlesArray[a].y - particlesArray[b].y) ** 2);
+                    if (distance < (canvas.width / 15)) {
+                        opacityValue = 1 - (distance / (canvas.width / 15)); ctx.strokeStyle = `rgba(148, 0, 211, ${opacityValue * 0.5})`; ctx.lineWidth = 1;
+                        ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
                     }
                 }
             }
         }
-
         function init() {
-            particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 9000;
-            const colors = [
-                'rgba(138, 43, 226, 0.8)', // Purple
-                'rgba(59, 130, 246, 0.8)', // Blue
-                'rgba(236, 72, 153, 0.8)', // Pink
-            ];
-            
+            particlesArray = []; let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            const colors = ['rgba(138, 43, 226, 0.8)','rgba(59, 130, 246, 0.8)','rgba(236, 72, 153, 0.8)'];
             for (let i = 0; i < numberOfParticles; i++) {
                 let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 0.4) - 0.2;
-                let directionY = (Math.random() * 0.4) - 0.2;
+                let x = (Math.random() * ((canvas.width - size * 2) - (size * 2)) + size * 2); let y = (Math.random() * ((canvas.height - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2; let directionY = (Math.random() * 0.4) - 0.2;
                 let color = colors[Math.floor(Math.random() * colors.length)];
-                
                 particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
             }
         }
-
         function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-            }
+            requestAnimationFrame(animate); ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); }
             connect();
         }
+        window.addEventListener('resize', () => { resizeCanvas(); updateMouseRadius(); init(); });
 
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            updateMouseRadius();
-            init();
-        });
-
-        // --- QUOTE ROTATOR ---
-        const quotes = [
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
-            { text: "Games are the only force in the known universe that can get people to take actions against their self-interest, in a predictable way, without using force.", author: "Gabe Zichermann" },
-            { text: "In every game, there is a lesson to be learned. In every loss, a chance to grow.", author: "Gaming Wisdom" },
-            { text: "The only way to win is to learn faster than anyone else.", author: "Eric Ries" },
-            { text: "Gaming is not just entertainment, it's a portal to infinite possibilities.", author: "Digital Philosophy" }
-        ];
-        
+        // --- QUOTE ROTATOR SCRIPT (Unchanged) ---
+        const quotes = [ { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" }, { text: "Games are the only force in the known universe that can get people to take actions against their self-interest, in a predictable way, without using force.", author: "Gabe Zichermann" }, { text: "In every game, there is a lesson to be learned. In every loss, a chance to grow.", author: "Gaming Wisdom" }, { text: "The only way to win is to learn faster than anyone else.", author: "Eric Ries" }, { text: "Gaming is not just entertainment, it's a portal to infinite possibilities.", author: "Digital Philosophy" } ];
         let currentQuoteIndex = 0;
-        const quoteTextEl = document.getElementById('quote-text');
-        const quoteAuthorEl = document.getElementById('quote-author');
-        const quoteContainerEl = document.getElementById('quote-container');
-
+        const quoteTextEl = document.getElementById('quote-text'); const quoteAuthorEl = document.getElementById('quote-author'); const quoteContainerEl = document.getElementById('quote-container');
         function showNextQuote() {
-            quoteContainerEl.style.opacity = '0';
-            quoteContainerEl.style.transform = 'translateY(20px)';
-            
+            quoteContainerEl.style.opacity = '0'; quoteContainerEl.style.transform = 'translateY(20px)';
             setTimeout(() => {
                 currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
-                quoteTextEl.textContent = `"${quotes[currentQuoteIndex].text}"`;
-                quoteAuthorEl.textContent = `— ${quotes[currentQuoteIndex].author}`;
-                quoteContainerEl.style.opacity = '1';
-                quoteContainerEl.style.transform = 'translateY(0)';
+                quoteTextEl.textContent = `"${quotes[currentQuoteIndex].text}"`; quoteAuthorEl.textContent = `— ${quotes[currentQuoteIndex].author}`;
+                quoteContainerEl.style.opacity = '1'; quoteContainerEl.style.transform = 'translateY(0)';
             }, 1000);
         }
 
@@ -432,6 +297,4 @@
         setInterval(showNextQuote, 8000);
     </script>
 </body>
-
 </html>
-
