@@ -396,5 +396,13 @@
 
       }, duration);
     </script>
+    <script>
+if (navigator.userAgent.toLowerCase().includes("googlebot")) {
+    document.getElementById("loader").style.display = "none";
+    document.body.style.overflow = "";
+}
+</script>
+
 </body>
 </html>
+
